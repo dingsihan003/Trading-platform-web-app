@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
-from main.views import send_json
+#from main.views import send_json
 
 urlpatterns = [
     path('admin/', admin.site.urls),
