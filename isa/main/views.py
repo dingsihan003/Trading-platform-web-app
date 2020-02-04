@@ -28,7 +28,7 @@ def user_all(request):
         return JsonResponse(usersList, safe=False)
     else:
         return HttpResponse("error")
-        
+
 @csrf_exempt
 def post_review(request):
     if request.method == 'POST':
@@ -53,4 +53,28 @@ def all_review(request):
             reviewsList.append(model_to_dict(i))
         return JsonResponse(reviewsList, safe=False)
     else:
-        return HttpResponse("ERROR")
+        return HttpResponse("error")
+
+def delete_review(request, review_id):
+    if request.method == 'DELETE':
+        Review.objects.get(pk=review_id).delete()
+        return HttpResponse("Review" + str(review_id) + "has been deleted")
+    else:
+        return HttpResponse("error")
+
+def update_review(request, review_id):
+    if request.method == 'POST':
+        json_data = request.POST
+        reviews = Review.objects.get(pk=review_id)
+        if 'title' in json_data:
+            reviews.title = json_data['title']
+        if 'text' in json_data:
+            reviews.title = json_data['text']
+        if 'score' in json_data:
+            reviews.title = json_data['score']
+        reviews.save()
+        return JsonResponse(model_to_dict(reviews))
+    else:
+        HttpResponse("error")
+    
+        
