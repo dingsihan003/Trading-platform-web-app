@@ -64,7 +64,6 @@ def all_review(request):
             reviewsList.append(model_to_dict(i))
         return JsonResponse(reviewsList, safe=False)
     else:
-<<<<<<< HEAD
         return HttpResponse("error")
 
 def delete_review(request, review_id):
@@ -90,6 +89,4 @@ def update_review(request, review_id):
         HttpResponse("error")
     
         
-=======
         return HttpResponse("ERROR")
->>>>>>> f72d76007d7c91f337a6d0a4ea5ca85a9bca34ae
