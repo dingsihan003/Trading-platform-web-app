@@ -29,6 +29,17 @@ def user_all(request):
     else:
         return HttpResponse("error")
 
+
+def product_all(request):
+    if request.method == 'GET':
+        products = Product.objects.all()
+        ProductList = []
+        for i in products:
+            ProductList.append(model_to_dict(i))
+        return JsonResponse(ProductList, safe=False)
+    else:
+        return HttpResponse("error")
+        
 @csrf_exempt
 def post_review(request):
     if request.method == 'POST':
@@ -53,6 +64,7 @@ def all_review(request):
             reviewsList.append(model_to_dict(i))
         return JsonResponse(reviewsList, safe=False)
     else:
+<<<<<<< HEAD
         return HttpResponse("error")
 
 def delete_review(request, review_id):
@@ -78,3 +90,6 @@ def update_review(request, review_id):
         HttpResponse("error")
     
         
+=======
+        return HttpResponse("ERROR")
+>>>>>>> f72d76007d7c91f337a6d0a4ea5ca85a9bca34ae
