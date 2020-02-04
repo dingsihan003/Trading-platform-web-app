@@ -28,3 +28,29 @@ def user_all(request):
         return JsonResponse(usersList, safe=False)
     else:
         return HttpResponse("error")
+        
+@csrf_exempt
+def post_review(request):
+    if request.method == 'POST':
+        json_data = request.POST
+        review = Review()
+        for k, v in json_data.items():
+            setattr(review, key, value)
+        if 'poster' in json_data:
+            reviewObj.poster_user = Users.objects.get(pk=json_data['poster'])
+        if 'postee' in json_data:
+            reviewObj.postee_user = Users.objects.get(pk=json_data['postee'])
+        review.save()
+        return JsonResponse(model_to_dict(reviewObj))
+    else:
+        return HttpResponse("error") 
+
+def all_review(request):
+    if request.method == 'GET':
+        reviews = Review.objects.all()
+        reviewsList = []
+        for i in reviews:
+            reviewsList.append(model_to_dict(i))
+        return JsonResponse(reviewsList, safe=False)
+    else:
+        return HttpResponse("ERROR")
