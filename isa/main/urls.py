@@ -13,7 +13,7 @@ urlpatterns = [
     path('api/v1/products/',views.product_all, name='product_all'),
     path('api/v1/reviews/',views.all_review, name='all_reviews'),
     path('api/v1/reviews/create/',views.post_review, name='create_reviews'),
-    path('api/v1/reviews/delete/',views.delete_review, name='delete_review'),
+    path('api/v1/reviews/delete/<int:review_id>',views.delete_review, name='delete_review'),
     path('api/v1/reviews/update/',views.update_review, name='update_review'),
 
 ]
