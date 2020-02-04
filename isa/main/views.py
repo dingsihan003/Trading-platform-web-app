@@ -28,3 +28,14 @@ def user_all(request):
         return JsonResponse(usersList, safe=False)
     else:
         return HttpResponse("error")
+
+
+def product_all(request):
+    if request.method == 'GET':
+        products = Product.objects.all()
+        ProductList = []
+        for i in products:
+            ProductList.append(model_to_dict(i))
+        return JsonResponse(ProductList, safe=False)
+    else:
+        return HttpResponse("error")

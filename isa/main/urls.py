@@ -9,4 +9,5 @@ from . import views
 urlpatterns = [
     path('api/v1/users/',views.user_all, name='user_all'),
     path('api/v1/users/create/',views.user_create, name='user_create'),
+    path('api/v1/products/',views.product_all, name='product_all'),
 ]
