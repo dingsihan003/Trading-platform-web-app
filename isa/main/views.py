@@ -66,7 +66,6 @@ def all_review(request):
     else:
         return HttpResponse("error")
 
-@csrf_exempt
 def delete_review(request, review_id):
     if request.method == 'DELETE':
         Review.objects.get(pk=review_id).delete()
@@ -74,7 +73,6 @@ def delete_review(request, review_id):
     else:
         return HttpResponse("error")
 
-@csrf_exempt
 def update_review(request, review_id):
     if request.method == 'POST':
         json_data = request.POST
@@ -83,12 +81,11 @@ def update_review(request, review_id):
             reviews.title = json_data['title']
         if 'text' in json_data:
             reviews.title = json_data['text']
-        if 'score' in json_data:
-            reviews.title = json_data['score']
+        if 'poster' in json_data:
+            return HttpResponse("You cannot update poster.")
+        if 'postee' in json_data:
+            return HttpResponse("You cannot update postee.")
         reviews.save()
         return JsonResponse(model_to_dict(reviews))
     else:
-        HttpResponse("error")
-    
-        
-        return HttpResponse("ERROR")
+        return HttpResponse("error")
