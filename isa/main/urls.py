@@ -8,12 +8,15 @@ from . import views
 
 urlpatterns = [
 
-    path('api/v1/users/',views.user_all, name='user_all'),
-    path('api/v1/users/create/',views.user_create, name='user_create'),
-    path('api/v1/products/',views.product_all, name='product_all'),
+    path('api/v1/users/',views.all_user, name='all_user'),
+    path('api/v1/users/create/',views.create_user, name='create_user'),
+    path('api/v1/products/',views.all_product, name='all_product'),
+    path('api/v1/products/create',views.create_product, name='create_product'),
+    path('api/v1/products/delete/<int:review_id>',views.delete_product, name='delete_product'),
+    path('api/v1/products/update/<int:review_id>',views.update_product, name='update_product'),
     path('api/v1/reviews/',views.all_review, name='all_reviews'),
     path('api/v1/reviews/create/',views.post_review, name='create_reviews'),
     path('api/v1/reviews/delete/<int:review_id>',views.delete_review, name='delete_review'),
-    path('api/v1/reviews/update/',views.update_review, name='update_review'),
+    path('api/v1/reviews/update/<int:review_id>',views.update_review, name='update_review'),
 
 ]

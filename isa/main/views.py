@@ -10,7 +10,7 @@ from django.forms.models import model_to_dict
 # USER SECTION
 
 @csrf_exempt
-def user_create(request):
+def create_user(request):
     if request.method == 'POST':
         json_data = request.POST
         user = Users()
@@ -22,7 +22,7 @@ def user_create(request):
         return HttpResponse("error")
 
 
-def user_all(request):
+def all_user(request):
     if request.method == 'GET':
         users = Users.objects.all()
         usersList = []
@@ -35,7 +35,7 @@ def user_all(request):
 # PRODUCT SECTION
 
 @csrf_exempt
-def prodcut_create(request):
+def create_prodcut(request):
     if request.method == 'POST':
         json_data = request.POST
         product = Product()
@@ -46,7 +46,7 @@ def prodcut_create(request):
     else:
         return HttpResponse("error")
 
-def product_all(request):
+def all_product(request):
     if request.method == 'GET':
         products = Product.objects.all()
         ProductList = []
