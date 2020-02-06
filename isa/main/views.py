@@ -71,11 +71,11 @@ def update_product(request, product_id):
         if 'product_title' in json_data:
             product.title = json_data['product_title']
         if 'product_base_price' in json_data:
-            product.title = json_data['product_base_price']
+            product.product_base_price = json_data['product_base_price']
         if 'product_description' in json_data:
-            product.title = json_data['product_description']
+            product.product_description = json_data['product_description']
         if 'sold' in json_data:
-            product.title = json_data['sold']
+            product.sold = json_data['sold']
         if 'product_date_added' in json_data:
             return HttpResponse("You cannot update product added date.")
         product.save()
@@ -127,7 +127,7 @@ def update_review(request, review_id):
         if 'title' in json_data:
             reviews.title = json_data['title']
         if 'text' in json_data:
-            reviews.title = json_data['text']
+            reviews.text = json_data['text']
         if 'poster' in json_data:
             return HttpResponse("You cannot update poster.")
         if 'postee' in json_data:
