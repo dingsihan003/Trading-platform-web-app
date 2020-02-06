@@ -12,7 +12,7 @@ def user_create(request):
         json_data = request.POST
         user = Users()
         for k, v in json_data.items():
-            setattr(user, key, value)
+            setattr(user, k, v)
         user.save()
         return JsonResponse(model_to_dict(user),safe=False)
     else:
@@ -46,7 +46,7 @@ def post_review(request):
         json_data = request.POST
         review = Review()
         for k, v in json_data.items():
-            setattr(review, key, value)
+            setattr(review, k, v)
         if 'poster' in json_data:
             reviewObj.poster_user = Users.objects.get(pk=json_data['poster'])
         if 'postee' in json_data:
