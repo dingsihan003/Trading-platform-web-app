@@ -111,6 +111,7 @@ def all_review(request):
     else:
         return HttpResponse("error")
 
+@csrf_exempt
 def delete_review(request, review_id):
     if request.method == 'DELETE':
         Review.objects.get(pk=review_id).delete()
