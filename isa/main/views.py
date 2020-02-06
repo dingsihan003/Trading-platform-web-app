@@ -64,7 +64,7 @@ def delete_product(request, product_id):
         return HttpResponse("error")
 
 @csrf_exempt
-def update_product(request, review_id):
+def update_product(request, product_id):
     if request.method == 'POST':
         json_data = request.POST
         product = Product.objects.get(pk=product_id)
