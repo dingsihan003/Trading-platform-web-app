@@ -35,7 +35,7 @@ def all_user(request):
 # PRODUCT SECTION
 
 @csrf_exempt
-def create_prodcut(request):
+def create_product(request):
     if request.method == 'POST':
         json_data = request.POST
         product = Product()
