@@ -6,6 +6,9 @@ from .models import *
 from django.forms.models import model_to_dict
 # Create your views here.
 
+
+# USER SECTION
+
 @csrf_exempt
 def user_create(request):
     if request.method == 'POST':
@@ -29,6 +32,19 @@ def user_all(request):
     else:
         return HttpResponse("error")
 
+# PRODUCT SECTION
+
+@csrf_exempt
+def prodcut_create(request):
+    if request.method == 'POST':
+        json_data = request.POST
+        product = Product()
+        for k, v in json_data.items():
+            setattr(product, key, value)
+        product.save()
+        return JsonResponse(model_to_dict(product),safe=False)
+    else:
+        return HttpResponse("error")
 
 def product_all(request):
     if request.method == 'GET':
@@ -39,7 +55,36 @@ def product_all(request):
         return JsonResponse(ProductList, safe=False)
     else:
         return HttpResponse("error")
-        
+
+def delete_product(request, product_id):
+    if request.method == 'DELETE':
+        Product.objects.get(pk=product_id).delete()
+        return HttpResponse("Product" + str(review_id) + "has been deleted")
+    else:
+        return HttpResponse("error")
+
+@csrf_exempt
+def update_product(request, review_id):
+    if request.method == 'POST':
+        json_data = request.POST
+        product = Product.objects.get(pk=product_id)
+        if 'product_title' in json_data:
+            product.title = json_data['product_title']
+        if 'product_base_price' in json_data:
+            product.title = json_data['product_base_price']
+        if 'product_description' in json_data:
+            product.title = json_data['product_description']
+        if 'sold' in json_data:
+            product.title = json_data['sold']
+        if 'product_date_added' in json_data:
+            return HttpResponse("You cannot update product added date.")
+        product.save()
+        return JsonResponse(model_to_dict(product))
+    else:
+        return HttpResponse("error")
+
+# REIVEW SECTION
+
 @csrf_exempt
 def post_review(request):
     if request.method == 'POST':
@@ -73,6 +118,7 @@ def delete_review(request, review_id):
     else:
         return HttpResponse("error")
 
+@csrf_exempt
 def update_review(request, review_id):
     if request.method == 'POST':
         json_data = request.POST
