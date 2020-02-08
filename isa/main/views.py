@@ -19,7 +19,7 @@ def create_user(request):
         user.save()
         return JsonResponse(model_to_dict(user),safe=False)
     else:
-        return HttpResponse("error")
+        return HttpResponse("Error")
 
 
 def all_user(request):
