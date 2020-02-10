@@ -16,8 +16,11 @@ def create_user(request):
         user = Users()
         for k, v in json_data.items():
             setattr(user, k, v)
-        user.save()
-        return JsonResponse(model_to_dict(user),safe=False)
+        try:
+            user.save()
+            return JsonResponse(model_to_dict(user),safe=False)
+        except:
+            return HttpResponse("Invalid Input")
     else:
         return HttpResponse("Error")
 
@@ -25,10 +28,10 @@ def create_user(request):
 def all_user(request):
     if request.method == 'GET':
         users = Users.objects.all()
-        usersList = []
+        all_users = []
         for i in users:
-            usersList.append(model_to_dict(i))
-        return JsonResponse(usersList, safe=False)
+            all_users.append(model_to_dict(i))
+        return JsonResponse(all_users, safe=False)
     else:
         return HttpResponse("error")
 
@@ -41,18 +44,21 @@ def create_product(request):
         product = Product()
         for k, v in json_data.items():
             setattr(product, k, v)
-        product.save()
-        return JsonResponse(model_to_dict(product),safe=False)
+        try:
+            product.save()
+            return JsonResponse(model_to_dict(product),safe=False)
+        except:
+            return HttpResponse("Invalid Input")
     else:
         return HttpResponse("error")
 
 def all_product(request):
     if request.method == 'GET':
         products = Product.objects.all()
-        ProductList = []
+        all_products = []
         for i in products:
-            ProductList.append(model_to_dict(i))
-        return JsonResponse(ProductList, safe=False)
+            all_products .append(model_to_dict(i))
+        return JsonResponse(all_products , safe=False)
     else:
         return HttpResponse("error")
 
@@ -77,8 +83,11 @@ def update_product(request, product_id):
             product.sold = json_data['sold']
         if 'product_date_added' in json_data:
             return HttpResponse("You cannot update product added date.")
-        product.save()
-        return JsonResponse(model_to_dict(product))
+        try:
+            product.save()
+            return JsonResponse(model_to_dict(product))
+        except:
+            return HttpResponse("Invalid Input")
     else:
         return HttpResponse("error")
 
@@ -95,18 +104,21 @@ def post_review(request):
             review.poster = Users.objects.get(pk=json_data['poster'])
         if 'postee' in json_data:
             review.postee = Users.objects.get(pk=json_data['postee'])
-        review.save()
-        return JsonResponse(model_to_dict(reviewObj))
+        try:
+            review.save()
+            return JsonResponse(model_to_dict(reviewObj))
+        except:
+            return HttpResponse("Invalid Input")
     else:
         return HttpResponse("error") 
 
 def all_review(request):
     if request.method == 'GET':
         reviews = Review.objects.all()
-        reviewsList = []
+        all_reviews = []
         for i in reviews:
-            reviewsList.append(model_to_dict(i))
-        return JsonResponse(reviewsList, safe=False)
+            all_reviews.append(model_to_dict(i))
+        return JsonResponse(all_reviews, safe=False)
     else:
         return HttpResponse("error")
 
@@ -133,7 +145,10 @@ def update_review(request, review_id):
             return HttpResponse("You cannot update postee.")
         if 'review_date_added' in json_data:
             return HttpResponse("You cannot update review added date.")
-        reviews.save()
-        return JsonResponse(model_to_dict(reviews))
+        try:
+            reviews.save()
+            return JsonResponse(model_to_dict(reviews))
+        except:
+            return HttpResponse("Invalid Input")
     else:
         return HttpResponse("error")
