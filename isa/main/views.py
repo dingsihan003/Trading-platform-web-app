@@ -20,7 +20,7 @@ def create_user(request):
             user.save()
             return JsonResponse(model_to_dict(user),safe=False)
         except:
-            return HttpResponse("Invalid Input or product_title / product_base_price / product_description is empty")
+            return HttpResponse("Invalid Input or product_title / product_base_price / product_description cannot be empty")
     else:
         return HttpResponse("Error")
 
@@ -98,17 +98,27 @@ def post_review(request):
     if request.method == 'POST':
         json_data = request.POST
         review = Review()
-        for k, v in json_data.items():
-            setattr(review, k, v)
+        if 'title' in json_data:
+            review.title = json_data['title']
+        if 'text' in json_data:
+            review.text = json_data['text']
+        if 'review_date_added' in json_data:
+            return HttpResponse("You cannot set review added date.")
         if 'poster' in json_data:
-            review.poster = Users.objects.get(pk=json_data['poster'])
+            try:
+                review.poster = Users.objects.get(pk=json_data['poster'])
+            except:
+                return HttpResponse("Invalid Input")
         if 'postee' in json_data:
-            review.postee = Users.objects.get(pk=json_data['postee'])
+            try:
+                review.postee = Users.objects.get(pk=json_data['postee'])
+            except:
+                return HttpResponse("Invalid Input")
         try:
             review.save()
-            return JsonResponse(model_to_dict(reviewObj))
+            return JsonResponse(model_to_dict(review))
         except:
-            return HttpResponse("Invalid Input")
+            return HttpResponse("Invalid Input or poster / postee cannot be empty ")
     else:
         return HttpResponse("error") 
 
