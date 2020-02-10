@@ -20,7 +20,7 @@ def create_user(request):
             user.save()
             return JsonResponse(model_to_dict(user),safe=False)
         except:
-            return HttpResponse("Invalid Input")
+            return HttpResponse("Invalid Input or product_title / product_base_price / product_description is empty")
     else:
         return HttpResponse("Error")
 
