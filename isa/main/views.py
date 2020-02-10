@@ -93,9 +93,9 @@ def post_review(request):
         for k, v in json_data.items():
             setattr(review, k, v)
         if 'poster' in json_data:
-            reviewObj.poster_user = Users.objects.get(pk=json_data['poster'])
+            review.poster = Users.objects.get(pk=json_data['poster'])
         if 'postee' in json_data:
-            reviewObj.postee_user = Users.objects.get(pk=json_data['postee'])
+            review.postee = Users.objects.get(pk=json_data['postee'])
         review.save()
         return JsonResponse(model_to_dict(reviewObj))
     else:
