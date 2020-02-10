@@ -132,6 +132,8 @@ def update_review(request, review_id):
             return HttpResponse("You cannot update poster.")
         if 'postee' in json_data:
             return HttpResponse("You cannot update postee.")
+        if 'review_date_added' in json_data:
+            return HttpResponse("You cannot update review added date.")
         reviews.save()
         return JsonResponse(model_to_dict(reviews))
     else:
