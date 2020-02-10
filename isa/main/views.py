@@ -59,7 +59,7 @@ def all_product(request):
 def delete_product(request, product_id):
     if request.method == 'DELETE':
         Product.objects.get(pk=product_id).delete()
-        return HttpResponse("Product" + str(review_id) + "has been deleted")
+        return HttpResponse("Product" + str(product_id) + "has been deleted")
     else:
         return HttpResponse("error")
 
