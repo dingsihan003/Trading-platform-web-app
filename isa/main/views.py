@@ -62,6 +62,7 @@ def all_product(request):
     else:
         return HttpResponse("error")
 
+@csrf_exempt
 def delete_product(request, product_id):
     if request.method == 'DELETE':
         Product.objects.get(pk=product_id).delete()
@@ -74,8 +75,6 @@ def update_product(request, product_id):
     if request.method == 'POST':
         json_data = request.POST
         product = Product.objects.get(pk=product_id)
-        if 'product_title' in json_data:
-            product.title = json_data['product_title']
         if 'product_base_price' in json_data:
             product.product_base_price = json_data['product_base_price']
         if 'product_description' in json_data:
