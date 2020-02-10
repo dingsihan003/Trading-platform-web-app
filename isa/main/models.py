@@ -15,8 +15,7 @@ class Product(models.Model):
     sold = models.BooleanField(default=False)
 
 class Review(models.Model):
-    title = models.CharField(max_length=200, default="Title")
-    text = models.CharField(max_length=200, default="Body")
-    score = models.FloatField(default=0) 
+    title = models.CharField(max_length=200, default="title")
+    text = models.CharField(max_length=200, default="text")
     poster = models.ForeignKey(Users, related_name='poster',on_delete=models.CASCADE)
     postee = models.ForeignKey(Users, related_name='postee',on_delete=models.CASCADE)
