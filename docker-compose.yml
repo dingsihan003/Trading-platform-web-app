@@ -13,7 +13,7 @@ services:
       - "8001:8000"
     volumes:
       - ./isa:/app
-    command: bash -c "mod_wsgi-express start-server --reload-on-changes ./isa/wsgi.py"
+    command: "mod_wsgi-express start-server --reload-on-changes ./isa/wsgi.py"
 
   experience:
     image: tp33/django
@@ -25,7 +25,7 @@ services:
       - "8002:8000"
     volumes:
       - ./experience:/app
-    command: bash -c "mod_wsgi-express start-server --reload-on-changes ./experience/wsgi.py"
+    command: "mod_wsgi-express start-server --reload-on-changes ./experience/wsgi.py"
 
   front:
     image: tp33/django
@@ -36,7 +36,7 @@ services:
       - "8000:8000"
     volumes:
       - ./front:/app
-    command: bash -c "mod_wsgi-express start-server --reload-on-changes ./front/wsgi.py"
+    command: "mod_wsgi-express start-server --reload-on-changes ./front/wsgi.py"
 
 networks:
   backend:
