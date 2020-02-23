@@ -3,15 +3,42 @@ services:
 
   models:
     image: tp33/django
+    container_name: models
     external_links:
       - mysql:db
-    volumes:
-      - ./isa:/app
-    ports:
-      - "8001:8000"
     networks:
       - backend
-    command: bash -c "mod_wsgi-express start-server --working-directory ./ --reload-on-changes ./isa/wsgi.py"
+      - service_mesh
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./isa:/app
+    command: bash -c "mod_wsgi-express start-server --reload-on-changes ./isa/wsgi.py"
+
+  experience:
+    image: tp33/django
+    container_name: experience
+    networks:
+      - service_mesh
+      - public
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./experience:/app
+    command: bash -c "mod_wsgi-express start-server --reload-on-changes ./experience/wsgi.py"
+
+  front:
+    image: tp33/django
+    container_name: front
+    networks:
+      - public
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./front:/app
+    command: bash -c "mod_wsgi-express start-server --reload-on-changes ./front/wsgi.py"
 
 networks:
   backend:
+  public:
+  service_mesh:
