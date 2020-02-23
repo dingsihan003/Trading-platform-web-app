@@ -57,7 +57,7 @@ def all_product(request):
         products = Product.objects.all()
         all_products = []
         for i in products:
-            all_products .append(model_to_dict(i))
+            all_products.append(model_to_dict(i))
         return JsonResponse(all_products , safe=False)
     else:
         return HttpResponse("error")
@@ -88,6 +88,26 @@ def update_product(request, product_id):
             return JsonResponse(model_to_dict(product))
         except:
             return HttpResponse("Invalid Input")
+    else:
+        return HttpResponse("error")
+
+def price_listing(request):
+    if request.method == 'GET'
+        products = Product.objects.all().order_by('product_base_price')
+        all_products = []
+        for i in products:
+            all_products.append(model_to_dict(i))
+        return JsonResponse(all_products , safe=False)
+    else:
+        return HttpResponse("error")
+
+def price_listinng(request):
+    if request.method == 'GET'
+        products = Product.objects.all().order_by('product_date_added')
+        all_products = []
+        for i in products:
+            all_products.append(model_to_dict(i))
+        return JsonResponse(all_products , safe=False)
     else:
         return HttpResponse("error")
 
