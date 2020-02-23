@@ -18,5 +18,7 @@ urlpatterns = [
     path('api/v1/reviews/create/',views.post_review, name='create_reviews'),
     path('api/v1/reviews/delete/<int:review_id>',views.delete_review, name='delete_review'),
     path('api/v1/reviews/update/<int:review_id>',views.update_review, name='update_review'),
+    path('api/v1/pricelisting',views.price_listing, name='price_listing'),
+    path('api/v1/datelisting',views.date_listing, name='date_listing'),
 
 ]
