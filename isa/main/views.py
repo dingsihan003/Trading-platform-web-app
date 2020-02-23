@@ -101,7 +101,7 @@ def price_listing(request):
     else:
         return HttpResponse("error")
 
-def price_listinng(request):
+def date_listing(request):
     if request.method == 'GET' :
         products = Product.objects.all().order_by('product_date_added')
         all_products = []
