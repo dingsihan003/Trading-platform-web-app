@@ -70,6 +70,13 @@ def delete_product(request, product_id):
     else:
         return HttpResponse("error")
 
+def product_detail(request, product_id):
+    if request.method == "GET":
+        product = Product.objects.get(pk=product_id)
+        return JsonResponse(model_to_dict(product))
+    else:
+        return HttpResponse("error")
+
 @csrf_exempt
 def update_product(request, product_id):
     if request.method == 'POST':
