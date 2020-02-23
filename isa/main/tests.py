@@ -1,6 +1,9 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from .models import Users, Product, Review
+import urllib.request
+import urllib.parse
+import json
 
 class UsersTest(TestCase):
     #setUp method is called before each test in this class
@@ -12,8 +15,9 @@ class UsersTest(TestCase):
         self.assertContains(response, 'all_users')
 
     def TestCreateUser(self):
+        post_data = {'username': 'Demo User', 'email': 'example@a.com', 'location': 'VA'}
+        self.client.post(post_data)
         
+        test = self.client.get(reverse('all_users', kwargs={'email':'example@a.com'}))
 
-
-    def tearDown(self):
-        pass #nothing to tear down
+        self.assertContains(test,'all_users')
