@@ -10,14 +10,14 @@ class UsersTest(TestCase):
     def setUp(self):
         pass #nothing to set up
 
-    def TestReadingUser(self):
-        response = self.client.get(reverse('all_users', kwargs={'user_id':1}))
-        self.assertContains(response, 'all_users')
+    def testReadingUser(self):
+        response = self.client.get(reverse('all_user', kwargs={'id':1}))
+        self.assertContains(response, 'all_user')
 
-    def TestCreateUser(self):
+    def testCreateUser(self):
         post_data = {'username': 'Demo User', 'email': 'example@a.com', 'location': 'VA'}
         self.client.post(post_data)
         
-        test = self.client.get(reverse('all_users', kwargs={'email':'example@a.com'}))
+        test = self.client.get(reverse('all_user', kwargs={'email':'example@a.com'}))
 
-        self.assertContains(test,'all_users')
+        self.assertContains(test,'all_user')
