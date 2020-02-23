@@ -92,7 +92,7 @@ def update_product(request, product_id):
         return HttpResponse("error")
 
 def price_listing(request):
-    if request.method == 'GET'
+    if request.method == 'GET':
         products = Product.objects.all().order_by('product_base_price')
         all_products = []
         for i in products:
@@ -102,7 +102,7 @@ def price_listing(request):
         return HttpResponse("error")
 
 def price_listinng(request):
-    if request.method == 'GET'
+    if request.method == 'GET':
         products = Product.objects.all().order_by('product_date_added')
         all_products = []
         for i in products:
