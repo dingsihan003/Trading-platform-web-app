@@ -2,11 +2,14 @@
 {% block content %}
 <div class="container">
     <h1 class="mt-2">PRODUCTS</h1>
+    <h5 class="mt-2">ordered by price</h5>
     <table class="table">
       <thead>
         <tr>
           <th>Name</th>
           <th>Price</th>
+          <th>Date Added</th>
+          <th>See Detail</th>
         </tr>
       </thead>
       <tbody>
@@ -14,6 +17,37 @@
               <tr>
               <th>{{ product.product_title }}</th>
               <th>{{ product.product_base_price}}</th>
+              <th>{{ product.product_date_added}}</th>
+              <th><a class = "btn btn-primary recent-task" href="{% url 'product_detail' product.id %}" role="button">Go</a></th>
               </tr>
              {%endfor%}
+             </tbody>
+             </table>
+             </div>
+
+             
+             <div class="container">
+              <h5 class="mt-2">ordered by date added</h5>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Date Added</th>
+                    <th>See Detail</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for product in date_listing %}
+                        <tr>
+                        <th>{{ product.product_title }}</th>
+                        <th>{{ product.product_base_price}}</th>
+                        <th>{{ product.product_date_added}}</th>
+                        
+                        <th><a class = "btn btn-primary recent-task" href="{% url 'product_detail' product.id %}" role="button">Go</a></th>
+                        </tr>
+                       {%endfor%}
+                       </tbody>
+                       </table>
+                       </div>
 {% endblock %}

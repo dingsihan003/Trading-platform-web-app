@@ -1,0 +1,21 @@
+{% extends 'web/base.html' %}
+{% block content %}
+<div class="container">
+    <h1 class="mt-2">PRODUCT DETAIL</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Description</th>
+          <th>Date added</th>
+        </tr>
+      </thead>
+      <tbody>
+              <tr>
+              <th>{{ product.product_title }}</th>
+              <th>{{ product.product_base_price}}</th>
+              <th>{{ product.product_description}}</th>
+              <th>{{ product.product_date_added}}</th>
+              </tr>
+{% endblock %}

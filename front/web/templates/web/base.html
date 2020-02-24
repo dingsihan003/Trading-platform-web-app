@@ -48,7 +48,7 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
+        <li class="active"><a href="{% url 'home' %}">Home</a></li>
         <li><a href="#">About</a></li>
         <li><a href="#">Projects</a></li>
         <li><a href="#">Contact</a></li>
@@ -63,10 +63,6 @@
 {% block content %}
 
 {% endblock %}
-
-<footer class="container-fluid text-center">
-  <p>Footer Text</p>
-</footer>
-
 </body>
+
 </html>
