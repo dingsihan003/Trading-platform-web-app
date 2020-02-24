@@ -10,11 +10,11 @@ from django.views.decorators.csrf import csrf_exempt
 def home(request):
     if request.method == 'GET':
         req1 = urllib.request.Request('http://models:8000/api/v1/pricelisting/')
-        resp_json1 = urllib.request.urlopen(req).read().decode('utf-8')
+        resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
         resp1 = json.loads(resp_json1)
 
         req2 = urllib.request.Request('http://models:8000/api/v1/datelisting/')
-        resp_json2 = urllib.request.urlopen(req).read().decode('utf-8')
+        resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
         resp2 = json.loads(resp_json2)
 
         return JsonResponse([req1,req2],safe=False)
