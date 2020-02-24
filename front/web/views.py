@@ -14,8 +14,8 @@ def home(request):
         resp = json.loads(resp_json)
 
         context = {
-            'price_listing': resp[0]
-            'date_listing': resp[1]
+            'price_listing': resp[0],
+            'date_listing': resp[1],
         }
         return render(request,'web/home.html',context)
     else:
