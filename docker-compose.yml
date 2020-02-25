@@ -2,7 +2,7 @@ version: "3"
 services:
 
   mysql-cmdline:
-      image: mysql:5.7.23
+      image: mysql:latest
       container_name: mysql-cmdline
       external_links:
         - mysql:db
