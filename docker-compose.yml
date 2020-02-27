@@ -1,12 +1,12 @@
 version: "3"
 services:
 
-  mysql-cmdline:
-      image: mysql:latest
-      container_name: mysql-cmdline
-      external_links:
-        - mysql:db
-      command: bash -c "echo 'drop database if exists test_cs4501; grant all on test_cs4501.* to '\''www'\''@'\''%'\'';'"
+  # mysql-cmdline:
+  #     image: mysql:latest
+  #     container_name: mysql-cmdline
+  #     external_links:
+  #       - mysql:db
+  #     command: bash -c "echo 'drop database if exists test_cs4501; grant all on test_cs4501.* to '\''www'\''@'\''%'\'';'"
 
 
   models:
@@ -21,7 +21,7 @@ services:
       - "8001:8000"
     volumes:
       - ./isa:/app
-    command: "mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./isa/wsgi.py"
+    command: bash -c "python manage.py makemigrations & python manage.py migrate & python manage.py loaddata db.json & mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./isa/wsgi.py"
 
   experience:
     image: tp33/django
