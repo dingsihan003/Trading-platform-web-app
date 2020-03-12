@@ -10,6 +10,10 @@ urlpatterns = [
 
     path('api/v1/users/',views.all_user, name='all_user'),
     path('api/v1/users/create/',views.create_user, name='create_user'),
+    path('api/v1/users/check/',views.check_user, name='check_user'),
+    path('api/v1/authenticator/create/',views.create_authenticator, name='create_authenticator'),
+    path('api/v1/authenticator/find/',views.find_authenticator, name='finnd_authenticator'),
+    path('api/v1/authenticator/delete/<int:authenticator>/',views.delete_authenticator, name='delete_authenticator'),
     path('api/v1/products/',views.all_product, name='all_product'),
     path('api/v1/products/create/',views.create_product, name='create_product'),
     path('api/v1/products/<int:product_id>/',views.product_detail, name='product_detail'),

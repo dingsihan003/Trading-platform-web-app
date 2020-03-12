@@ -4,7 +4,50 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 from django.forms.models import model_to_dict
+import os
+import hmac
+import settings
 # Create your views here.
+
+# AUTHENTICATOR
+def create_authenticator(request):
+    if request.method == 'POST':
+        json_data = request.POST
+        auth = Authenticator()
+        for k, v in json_data.items():
+            setattr(auth, k, v)
+        authenticator = hmac.new(
+        key = settings.SECRET_KEY.encode('utf-8'),
+        msg = os.urandom(32),
+        digestmod = 'sha256',
+        ).hexdigest()
+        auth.authenticator = authenticator
+        auth.date_created = timezone.now()
+        auth.save()
+        return JsonResponse(model_to_dict(auth))
+    else:
+        return HttpResponse("Error")
+
+def find_authenticator(request, authenticator):
+    if request.method == 'GET':
+        try:
+            auth = Authenticator.objects.get(authenticator = authenticator)
+        except:
+            return HttpResponse("Authenticator does not exist")
+        return JsonResponse(model_to_dict(auth))
+    else:
+        return HttpResponse("Error")
+
+def delete_authenticator(request, authenticator):
+    if request.method == 'DELETE':
+        try:
+            auth = Authenticator.objects.get(authenticator = authenticator)
+        except:
+            return HttpResponse("Authenticator does not exist")
+        auth.delete()
+        return HttpResponse("Auth deleted")
+    else:
+        return HttpResponse("Error")
 
 
 # USER SECTION
@@ -15,7 +58,10 @@ def create_user(request):
         json_data = request.POST
         user = Users()
         for k, v in json_data.items():
-            setattr(user, k, v)
+            if k == 'password':
+                setattr(user, k, hashers.make_password(json_data['password']))
+            else:
+                setattr(user, k, v)
         try:
             user.save()
             return JsonResponse(model_to_dict(user),safe=False)
@@ -34,6 +80,19 @@ def all_user(request):
         return JsonResponse(all_users, safe=False)
     else:
         return HttpResponse("error")
+
+def check_user(request):
+    if request.method == 'POST':
+        try:
+            user = Users.objects.get(username=request.POST['username'])
+        except:
+            return HttpResponse("User not found")
+        if hashers.check_password(request.POST['password'], user.password:
+            return HttpResponse("Valid")
+        else:
+            return HttpResponse("Invalid")
+
+
 
 # PRODUCT SECTION
 

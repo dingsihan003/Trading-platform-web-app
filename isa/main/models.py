@@ -2,10 +2,16 @@ from django.db import models
 from datetime import datetime
 
 # Create your models here.
+class Authenticator(models.Model):
+    username = models.CharField(max_length=100)
+    authenticator = models.CharField(max_length=300)
+    date_created = models.DateTimeField()
+
 class Users(models.Model):
     username = models.CharField(max_length=100)
     email = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
+    password = models.CharField(max_length=50)
 
 class Product(models.Model):
     product_title = models.CharField(max_length=200)
