@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
-
+from django.conf import settings
 from .models import *
 from django.forms.models import model_to_dict
 import os
@@ -29,7 +29,7 @@ def create_authenticator(request):
         return JsonResponse(model_to_dict(auth))
     else:
         return HttpResponse("Error")
-
+@csrf_exempt
 def find_authenticator(request, authenticator):
     if request.method == 'GET':
         try:
@@ -39,7 +39,7 @@ def find_authenticator(request, authenticator):
         return JsonResponse(model_to_dict(auth))
     else:
         return HttpResponse("Error")
-
+@csrf_exempt
 def delete_authenticator(request, authenticator):
     if request.method == 'DELETE':
         try:
