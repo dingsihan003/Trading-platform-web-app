@@ -6,8 +6,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from urllib.error import URLError
-import exp_srvc_errors
-from .forms import *
+# import exp_srvc_errors
+# from .forms import *
 
 # Create your views here.
 def home(request):
@@ -36,6 +36,22 @@ def product_detail(request,product_id):
     else:
         return HttpResponse('Error')
 
+
+def user_profile(request,user_id):
+    if request.method == 'GET':
+        req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        context = {
+            'Users': resp,
+        }
+
+        return render(request,'web/user_profile.html',context)
+    else:
+        return HttpResponse('Error')
+
+
+
 def login(request):
     if request.method == 'GET':
         next = request.GET.get('next') or reverse('home')
@@ -53,11 +69,12 @@ def login(request):
     resp = json.loads(resp_json1)
 
     next = f.cleaned_data.get('next') or reverse('home')
-    if resp_json1 = 'User does not exist or password incorrect.': 
-      return render(request, 'web/login.html')
+    if (resp_json1 == 'User does not exist or password incorrect.'): 
+      return render(request, 'login.html')
     authenticator = resp['authenticator']
 
     response = HttpResponseRedirect(next)
     response.set_cookie("auth", authenticator)
 
     return response
+    

@@ -1,0 +1,52 @@
+<!-- {% block content %}
+<div class="container">
+    <h1 class="mt-2">USER PROFILE</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>email</th>
+          <th>Location</th>
+          <th>Password</th>
+        </tr>
+      </thead>
+      <tbody>
+              <tr>
+              <th>{{Users.username}}</th>
+              <th>{{Users.email}}</th>
+              <th>{{Users.location}}</th>
+              <th>{{Users.password}}</th>
+              </tr>
+{% endblock %} -->
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-24 col-sm-12 col-md-12">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                        <h3>
+                          <th>{{Users.username}}</th></h3>
+                        <h4><i class="glyphicon glyphicon-map-marker"></i><th>{{Users.location}}</th> </cite></h4>
+                        <h4>
+                            <i class="glyphicon glyphicon-envelope"></i><th>{{Users.email}}</th>
+                        </h4>
+                        <h4>
+                            <th>Password: {{Users.password}}</th></a>
+                            <br />
+                        </h4>
+                        <!-- Split button -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

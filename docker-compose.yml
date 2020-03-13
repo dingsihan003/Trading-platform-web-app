@@ -21,7 +21,8 @@ services:
       - "8001:8000"
     volumes:
       - ./isa:/app
-    command: bash -c "python manage.py migrate && python manage.py loaddata db.json && mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./isa/wsgi.py"
+    command: "mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./isa/wsgi.py"
+    # command: bash -c "python manage.py migrate && python manage.py loaddata db.json && mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./isa/wsgi.py"
 
   experience:
     image: tp33/django
