@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
 from .models import *
 from django.forms.models import model_to_dict
@@ -87,7 +88,7 @@ def check_user(request):
             user = Users.objects.get(username=request.POST['username'])
         except:
             return HttpResponse("User not found")
-        if hashers.check_password(request.POST['password'], user.password:
+        if hashers.check_password(request.POST['password'], user.password):
             return HttpResponse("Valid")
         else:
             return HttpResponse("Invalid")

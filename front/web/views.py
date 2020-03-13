@@ -39,10 +39,10 @@ def product_detail(request,product_id):
 def login(request):
     if request.method == 'GET':
         next = request.GET.get('next') or reverse('home')
-        return render(request, 'login.html')
+        return render(request, 'web/login.html')
     f =  LoginForm(request.POST)
     if not f.is_valid():
-      return render(request, 'login.html')
+      return render(request, 'web/login.html')
 
     username = f.cleaned_data['username']
     password = f.cleaned_data['password']
@@ -54,7 +54,7 @@ def login(request):
 
     next = f.cleaned_data.get('next') or reverse('home')
     if resp_json1 = 'User does not exist or password incorrect.': 
-      return render(request, 'login.html')
+      return render(request, 'web/login.html')
     authenticator = resp['authenticator']
 
     response = HttpResponseRedirect(next)
