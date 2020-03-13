@@ -6,7 +6,6 @@ from .models import *
 from django.forms.models import model_to_dict
 import os
 import hmac
-import settings
 # Create your views here.
 
 # AUTHENTICATOR
@@ -81,16 +80,25 @@ def all_user(request):
     else:
         return HttpResponse("error")
 
+def user(request,user_id):
+    if request.method == 'GET':
+        users = Users.objects.get(pk=user_id)
+        return JsonResponse(model_to_dict(users))
+    else:
+        return HttpResponse("error")
+
 def check_user(request):
     if request.method == 'POST':
         try:
             user = Users.objects.get(username=request.POST['username'])
         except:
             return HttpResponse("User not found")
-        if hashers.check_password(request.POST['password'], user.password:
+        if hashers.check_password(request.POST['password'], user.password):
             return HttpResponse("Valid")
         else:
             return HttpResponse("Invalid")
+
+
 
 
 
