@@ -13,6 +13,8 @@ urlpatterns = [
     path('users/<int:user_id>/update/',views.user_profile, name='user_profile'),
 
     path('login/',views.login, name='login'),
+    path('signup/',views.signup, name='signup'),
+    path('logout/',views.signup, name='logout'),
 
     path('users/<int:user_id>/',views.user_profile, name='user_profile')
 ]

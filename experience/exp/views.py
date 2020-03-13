@@ -57,7 +57,7 @@ def profile_update(request,user_id):
 
 
          
-
+@csrf_exempt 
 def signup(request):
     if request.method == "POST":
         res = (request.POST).dict()

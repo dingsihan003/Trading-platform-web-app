@@ -77,7 +77,7 @@ def login(request):
     f =  LoginForm(request.POST)
     if not f.is_valid():
       return render(request, 'web/login.html')
-
+      
     username = f.cleaned_data['username']
     password = f.cleaned_data['password']
     login_dict = {"username": username, "password": password}
@@ -95,4 +95,36 @@ def login(request):
     response.set_cookie("auth", authenticator)
 
     return response
-    
+
+def signup(request):
+    f =  SignUpForm(request.POST)
+    if not f.is_valid():
+      return render(request, 'web/signup.html')
+
+    username = f.cleaned_data['username']
+    password = f.cleaned_data['password']
+    location = f.cleaned_data['location']
+    email = f.cleaned_data['email']
+    signup_dict = {"username": username, "password": password, "location": location, "email": email}
+    signup_encode = urllib.parse.urlencode(signup_dict).encode('utf-8')
+    req1 = urllib.request.Request('http://experience:8000/signup/', data=signup_encode, method='POST')
+    resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+    resp = json.loads(resp_json1)
+
+    next = f.cleaned_data.get('next') or reverse('home')
+    authenticator = resp[1]['authenticator']
+
+    response = HttpResponseRedirect(next)
+    response.set_cookie("auth", authenticator)
+
+    return response
+
+def logout(request):
+    auth = request.COOKIES.get('auth')
+    logout_dict = {"authenticator": auth}
+    logout_encode = urllib.parse.urlencode({"authenticator": auth}).encode('utf-8')
+    req1 = urllib.request.Request('http://experience:8000/signup/', data=logout_encode, method='POST')
+    resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+    response = HttpResponseRedirect(reverse('home'))
+    response.delete_cookie("auth")
+    return response
