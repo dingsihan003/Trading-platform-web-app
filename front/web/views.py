@@ -3,7 +3,7 @@ import urllib.request
 import urllib.parse
 import json
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from urllib.error import URLError
 from django.urls import reverse
@@ -88,7 +88,7 @@ def login(request):
 
     next = f.cleaned_data.get('next') or reverse('home')
     if (resp_json1 == 'User does not exist or password incorrect.'): 
-      return render(request, 'login.html')
+      return render(request, 'web/login.html')
     authenticator = resp['authenticator']
 
     response = HttpResponseRedirect(next)
