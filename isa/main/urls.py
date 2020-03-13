@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/v1/users/<int:user_id>/',views.user, name='user'),
     path('api/v1/users/create/',views.create_user, name='create_user'),
     path('api/v1/users/check/',views.check_user, name='check_user'),
+    path('api/v1/users/update/<int:user_id>/',views.update_user, name='update_user'),
     path('api/v1/authenticator/create/',views.create_authenticator, name='create_authenticator'),
     path('api/v1/authenticator/find/',views.find_authenticator, name='finnd_authenticator'),
     path('api/v1/authenticator/delete/<int:authenticator>/',views.delete_authenticator, name='delete_authenticator'),

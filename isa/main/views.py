@@ -87,7 +87,27 @@ def user(request,user_id):
         return JsonResponse(model_to_dict(users))
     else:
         return HttpResponse("error")
+
+
 @csrf_exempt
+def update_user(request, user_id):
+    if request.method == 'POST':
+        json_data = request.POST
+        users = Users.objects.get(pk=user_id)
+        if 'email' in json_data:
+            users.email = json_data['email']
+        if 'location' in json_data:
+            users.location = json_data['location']
+
+        try:
+            users.save()
+            return JsonResponse(model_to_dict(users))
+        except:
+            return HttpResponse("Invalid Input")
+    else:
+        return HttpResponse("error")
+
+
 def check_user(request):
     if request.method == 'POST':
         try:
@@ -100,8 +120,6 @@ def check_user(request):
             return HttpResponse("Invalid")
     else:
         return HttpResponse("Error")
-
-
 
 
 

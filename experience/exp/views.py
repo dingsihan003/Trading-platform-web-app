@@ -40,6 +40,24 @@ def user_profile(request,user_id):
     else:
         return HttpResponse('Error')
 
+
+
+def profile_update(request,user_id):
+    if request.method == "POST":
+        res=(request.POST).dict()
+        res_encode = urllib.parse.urlencode(res).encode('utf-8')
+        req1= urllib.request.Request('http://models:8000/api/v1/users/update/' + str(user_id )+ '/', data=res_encode, method='POST')
+        resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+        resp1 = json.loads(resp_json1)
+
+        return JsonResponse(resp1, safe=False)
+    else:
+        return HttpResponse('Error')
+
+
+
+         
+
 def signup(request):
     if request.method == "POST":
         res = (request.POST).dict()

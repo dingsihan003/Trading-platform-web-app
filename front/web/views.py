@@ -40,6 +40,7 @@ def product_detail(request,product_id):
 
 
 def user_profile(request,user_id):
+
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -51,6 +52,21 @@ def user_profile(request,user_id):
         return render(request,'web/user_profile.html',context)
     else:
         return HttpResponse('Error')
+
+
+
+
+def update_profile_email(request,user_id):
+    if request.method == 'POST':
+        form=emailForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            info["email"]=request.POST("email")
+            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+            req = urllib.request.Request('http://experience:8000/users/', data=post_encoded, method='POST')
+            resp = json.loads(resp_json)
+            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+
 
 
 
