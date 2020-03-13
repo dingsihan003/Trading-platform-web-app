@@ -55,21 +55,22 @@ def user_profile(request,user_id):
 
 
 
-
+@csrf_exempt
 def update_profile_email(request,user_id):
-    if request.method == 'POST':
-        form=emailForm(request.POST)
-        if form.is_valid():
-            info=form.cleaned_data
-            info["email"]=request.POST("email")
-            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
-            req = urllib.request.Request('http://experience:8000/users/', data=post_encoded, method='POST')
-            resp = json.loads(resp_json)
-            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+
+    form=emailForm(request.POST)
+    if form.is_valid():
+        info=form.cleaned_data
+        info["email"]=request.POST("email")
+        post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+        req = urllib.request.Request('http://experience:8000/users/', data=post_encoded, method='POST')
+        resp = json.loads(resp_json)
+        post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+    return render(request,'web/email.html')
 
 
 
-
+@csrf_exempt
 def login(request):
     if request.method == 'GET':
         next = request.GET.get('next') or reverse('home')

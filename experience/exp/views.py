@@ -41,7 +41,7 @@ def user_profile(request,user_id):
         return HttpResponse('Error')
 
 
-
+@csrf_exempt 
 def profile_update(request,user_id):
     if request.method == "POST":
         res=(request.POST).dict()
