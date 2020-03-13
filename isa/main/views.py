@@ -70,7 +70,7 @@ def create_user(request):
     else:
         return HttpResponse("Error")
 
-
+@csrf_exempt
 def all_user(request):
     if request.method == 'GET':
         users = Users.objects.all()
@@ -80,14 +80,14 @@ def all_user(request):
         return JsonResponse(all_users, safe=False)
     else:
         return HttpResponse("error")
-
+@csrf_exempt
 def user(request,user_id):
     if request.method == 'GET':
         users = Users.objects.get(pk=user_id)
         return JsonResponse(model_to_dict(users))
     else:
         return HttpResponse("error")
-
+@csrf_exempt
 def check_user(request):
     if request.method == 'POST':
         try:
@@ -98,6 +98,8 @@ def check_user(request):
             return HttpResponse("Valid")
         else:
             return HttpResponse("Invalid")
+    else:
+        return HttpResponse("Error")
 
 
 

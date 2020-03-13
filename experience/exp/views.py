@@ -57,7 +57,7 @@ def signup(request):
     else:
         return HttpResponse('Error')
 
-
+@csrf_exempt 
 def login(request):
     if request.method == "POST":
         res = (request.POST).dict()

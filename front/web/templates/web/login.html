@@ -41,6 +41,7 @@
         {% else %}
             <form action="/login/" method="post">
         {% endif %}
+        {% csrf_token %}
                 <div class="form-group">
                     <label for="username">Username: </label>
                     <input id="username" type="text" name="username" value="{{ username }}" class="form-control">
