@@ -7,9 +7,11 @@ from .models import *
 from django.forms.models import model_to_dict
 import os
 import hmac
+from django.contrib.auth import hashers
 # Create your views here.
 
 # AUTHENTICATOR
+@csrf_exempt
 def create_authenticator(request):
     if request.method == 'POST':
         json_data = request.POST
@@ -60,13 +62,12 @@ def create_user(request):
         for k, v in json_data.items():
             if k == 'password':
                 setattr(user, k, hashers.make_password(json_data['password']))
+                print(k)
             else:
                 setattr(user, k, v)
-        try:
-            user.save()
-            return JsonResponse(model_to_dict(user),safe=False)
-        except:
-            return HttpResponse("Invalid Input or product_title / product_base_price / product_description cannot be empty")
+                print(k)
+        user.save()
+        return JsonResponse(model_to_dict(user))
     else:
         return HttpResponse("Error")
 
@@ -107,13 +108,10 @@ def update_user(request, user_id):
     else:
         return HttpResponse("error")
 
-
+@csrf_exempt
 def check_user(request):
     if request.method == 'POST':
-        try:
-            user = Users.objects.get(username=request.POST['username'])
-        except:
-            return HttpResponse("User not found")
+        user = Users.objects.get(username=request.POST['username'])
         if hashers.check_password(request.POST['password'], user.password):
             return HttpResponse("Valid")
         else:
