@@ -1,0 +1,26 @@
+{% extends 'web/base.html' %}
+{% block content %}
+<form action="" method="post">
+    <div class="form-group">
+        <label for="product_title">Product Title: </label>
+        <input id="product_title" type="text" name="product_title" value="{{ product_title }}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="product_base_price">Product Base Price: </label>
+        <input id="product_base_price" type="text" name="product_base_price" value="{{ product_base_price }}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="product_description">Product Desciption: </label>
+        <input id="product_description" type="text" name="product_description" value="{{ product_description }}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="sold">Sold: </label>
+        <input id="sold" type="text" name="sold" value="{{ sold }}" class="form-control">
+    </div>
+    <div class="form-group form-check">
+      <input type="checkbox" class="form-check-input" id="exampleCheck1">
+      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}

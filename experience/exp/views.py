@@ -93,19 +93,31 @@ def login(request):
             return HttpResponse('User does not exist or password incorrect.')
     else:
         return HttpResponse('Error')
-
+@csrf_exempt
 def logout(request):
     if request.method == "POST":
         req1 = urllib.request.Request('http://models:8000/api/v1/authenticator/find/'+ request.POST["authenticator"] + '/')
         resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
         resp1 = json.loads(resp_json1)
+        print(resp1)
         
-        req2 = urllib.request.Request('http://models:8000/api/v1/authenticator/delete/'+ str(resp1["authenticator"]), method='DELETE')
+        req2 = urllib.request.Request('http://models:8000/api/v1/authenticator/delete/'+ str(resp1["authenticator"]+'/'), method='DELETE')
         resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
         return HttpResponse('Deleted')
     else:
         return HttpResponse('Error')
 
-        
-        
+@csrf_exempt       
+def create_listing(request):
+    if request.method == "POST":
+        res = (request.POST).dict()
+        listing_encode = urllib.parse.urlencode(res).encode('utf-8')
+        req1 = urllib.request.Request('http://models:8000/api/v1/products/create/', data=listing_encode, method='POST')
+        resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+        resp1 = json.loads(resp_json1)
+        return JsonResponse(resp1, safe=False)
+    else:
+        return HttpResponse('Error')
+
+
 
