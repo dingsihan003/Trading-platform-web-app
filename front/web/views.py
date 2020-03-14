@@ -57,15 +57,28 @@ def user_profile(request,user_id):
 
 @csrf_exempt
 def update_profile_email(request,user_id):
-
-    form=emailForm(request.POST)
-    if form.is_valid():
-        info=form.cleaned_data
-        info["email"]=request.POST("email")
-        post_encoded = urllib.parse.urlencode(info).encode('utf-8')
-        req = urllib.request.Request('http://experience:8000/users/', data=post_encoded, method='POST')
+    if request.method == 'POST':
+        form=emailForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            info["email"]=request.POST("email")
+            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+            print(post_encoded)
+            req = urllib.request.Request('http://experience:8000/users/update/' + str(user_id )+ '/', data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+        else:
+            return HttpResponse('Invalid Form')
+    else:
+        req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
-        post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+        context = {
+            'Users': resp,
+        }
+        return render(request,'web/email.html',context)
+
     return render(request,'web/email.html')
 
 

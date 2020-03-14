@@ -1,6 +1,6 @@
 {% extends 'web/base.html' %}
 {% block content %}
-<!-- 
+
   <div id="email">
     <h3 class="text-center text-white pt-5">Email</h3>
     <div class="container">
@@ -8,14 +8,14 @@
             <div id="email-column" class="col-md-6">
                 <div id="email-box" class="col-md-12">
                     <form id="email-form" class="form" action="" method="post">
-                        <form action="" method="post">
+                        <form  method="post">
                         {% csrf_token %}
 
                         <h3 class="text-center text-info">Update Email Address</h3>
 
                         <div class="form-group">
                             <label for="email" class="text-info">Enter New Email:</label><br>
-                            <input type="text" name="emal" id="emal" class="form-control">
+                            <input type="text" name="emal" id="emal" value = "{{Users.email}}" class="form-control">
                         </div>
 
                         <div id="register-link" class="text-right">
@@ -26,6 +26,6 @@
             </div>
         </div>
     </div>
-</div>   -->
+</div>  
 
 {% endblock %}
