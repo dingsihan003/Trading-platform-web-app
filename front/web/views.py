@@ -7,6 +7,8 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from urllib.error import URLError
 from django.urls import reverse
+from django.shortcuts import redirect
+
 
 # import exp_srvc_errors
 from .forms import *
@@ -81,19 +83,61 @@ def update_profile_email(request,user_id):
     else:
         auth = 0
 
-    form=emailForm(request.POST)
-    if form.is_valid():
-        info=form.cleaned_data
-        info["email"]=request.POST("email")
-        post_encoded = urllib.parse.urlencode(info).encode('utf-8')
-        req = urllib.request.Request('http://experience:8000/users/', data=post_encoded, method='POST')
+    if request.method == 'POST':
+        form=emailForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+            req = urllib.request.Request('http://experience:8000/users/update/' + str(user_id )+ '/', data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+        else:
+            return render(request,'web/invalid_email.html')
+    else:
+        req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
-        post_encoded = urllib.parse.urlencode(info).encode('utf-8')
-    context = {
+        context = {
             'Users': resp,
             'auth': auth,
-        }   
-    return render(request,'web/email.html',context)
+        }
+        return render(request,'web/email.html',context)
+
+    return redirect('/users/'+ str(user_id) + '/')
+    
+
+@csrf_exempt
+def update_profile_location(request,user_id):
+    auth = request.COOKIES.get('auth')
+    if auth:
+        auth = 1
+    else:
+        auth = 0
+
+    if request.method == 'POST':
+        form=locationForm(request.POST)
+        if form.is_valid():
+            info=form.cleaned_data
+            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+            req = urllib.request.Request('http://experience:8000/users/update/' + str(user_id )+ '/', data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+        else:
+            return HttpResponse('Invalid Form')
+    else:
+        req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        context = {
+            'Users': resp,
+            'auth': auth,
+        }
+        return render(request,'web/location.html',context)
+
+    return redirect('/users/'+ str(user_id) + '/')
+
 
 
 
