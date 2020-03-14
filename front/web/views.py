@@ -13,6 +13,11 @@ from .forms import *
 
 # Create your views here.
 def home(request):
+    auth = request.COOKIES.get('auth')
+    if auth:
+        auth = 1
+    else:
+        auth = 0
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/home/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -21,18 +26,25 @@ def home(request):
         context = {
             'price_listing': resp[0],
             'date_listing': resp[1],
+            'auth': auth,
         }
         return render(request,'web/home.html',context)
     else:
         return HttpResponse('Error')
 
 def product_detail(request,product_id):
+    auth = request.COOKIES.get('auth')
+    if auth:
+        auth = 1
+    else:
+        auth = 0
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/products/'+ str(product_id) + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
         context = {
             'product': resp,
+            'auth': auth,
         }
         return render(request,'web/products_detail.html',context)
     else:
@@ -40,6 +52,11 @@ def product_detail(request,product_id):
 
 
 def user_profile(request,user_id):
+    auth = request.COOKIES.get('auth')
+    if auth:
+        auth = 1
+    else:
+        auth = 0
 
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
@@ -47,6 +64,7 @@ def user_profile(request,user_id):
         resp = json.loads(resp_json)
         context = {
             'Users': resp,
+            'auth': auth,
         }
 
         return render(request,'web/user_profile.html',context)
@@ -57,6 +75,11 @@ def user_profile(request,user_id):
 
 @csrf_exempt
 def update_profile_email(request,user_id):
+    auth = request.COOKIES.get('auth')
+    if auth:
+        auth = 1
+    else:
+        auth = 0
 
     form=emailForm(request.POST)
     if form.is_valid():
@@ -66,7 +89,11 @@ def update_profile_email(request,user_id):
         req = urllib.request.Request('http://experience:8000/users/', data=post_encoded, method='POST')
         resp = json.loads(resp_json)
         post_encoded = urllib.parse.urlencode(info).encode('utf-8')
-    return render(request,'web/email.html')
+    context = {
+            'Users': resp,
+            'auth': auth,
+        }   
+    return render(request,'web/email.html',context)
 
 
 
@@ -119,13 +146,58 @@ def signup(request):
     response.set_cookie("auth", authenticator)
 
     return response
-
+@csrf_exempt
 def logout(request):
     auth = request.COOKIES.get('auth')
     logout_dict = {"authenticator": auth}
     logout_encode = urllib.parse.urlencode({"authenticator": auth}).encode('utf-8')
-    req1 = urllib.request.Request('http://experience:8000/signup/', data=logout_encode, method='POST')
+    req1 = urllib.request.Request('http://experience:8000/logout/', data=logout_encode, method='POST')
     resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
     response = HttpResponseRedirect(reverse('home'))
     response.delete_cookie("auth")
     return response
+
+@csrf_exempt
+def create_listing(request):
+
+    auth = request.COOKIES.get('auth')
+    # if auth:
+    #     auth = 1
+    # else:
+    #     auth = 0
+    # if auth == 0:
+    #     return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing")
+    # if request.method == 'GET':
+    #     return render(request, "web/create_listing.html")
+    f = ListingForm(request.POST)
+    context = {
+            'form': f,
+        }  
+    if not f.is_valid():
+        print("error")
+        return render(request, 'web/create_listing.html',context)
+    listing = f.cleaned_data
+    listing_encode = urllib.parse.urlencode(listing).encode('utf-8')
+    req1 = urllib.request.Request('http://experience:8000/create_listing/', data=listing_encode, method='POST')
+    resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+    resp1 = json.loads(resp_json1)
+
+    # # ...
+
+    # # Send validated information to our experience layer
+    # resp = create_listing_exp_api(auth, ...)
+
+    # # Check if the experience layer said they gave us incorrect information
+    # if resp and not resp['ok']:
+    #     if resp['error'] == exp_srvc_errors.E_UNKNOWN_AUTH:
+    #         # Experience layer reports that the user had an invalid authenticator --
+    #         #   treat like user not logged in
+    #         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing")
+
+    # # ...
+    context = {
+            'form': f,
+        }  
+
+    return render(request, "web/create_listing_success.html",context)
+
