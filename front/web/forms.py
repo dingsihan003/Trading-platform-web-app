@@ -11,7 +11,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(label='Password', max_length=100)
 
 class emailForm(forms.Form):
-    email=forms.CharField(max_length=100)
+    email=forms.EmailField(max_length=100)
 
 class locationForm(forms.Form):
     location=forms.CharField(max_length=100)
