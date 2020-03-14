@@ -161,12 +161,8 @@ def logout(request):
 def create_listing(request):
 
     auth = request.COOKIES.get('auth')
-    # if auth:
-    #     auth = 1
-    # else:
-    #     auth = 0
-    # if auth == 0:
-    #     return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing")
+    if not auth:
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
     # if request.method == 'GET':
     #     return render(request, "web/create_listing.html")
     f = ListingForm(request.POST)
@@ -195,9 +191,6 @@ def create_listing(request):
     #         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing")
 
     # # ...
-    context = {
-            'form': f,
-        }  
 
-    return render(request, "web/create_listing_success.html",context)
+    return render(request, "web/create_listing_success.html")
 
