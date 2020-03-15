@@ -17,6 +17,8 @@ from .forms import *
 # Create your views here.
 def home(request):
     auth = request.COOKIES.get('auth')
+    username=request.COOKIES.get('username')
+
     if auth:
         auth = 1
     else:
@@ -25,7 +27,7 @@ def home(request):
         req = urllib.request.Request('http://experience:8000/home/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
-
+        
         context = {
             'price_listing': resp[0],
             'date_listing': resp[1],
@@ -56,10 +58,6 @@ def product_detail(request,product_id):
 
 def user_profile(request,user_id):
     auth = request.COOKIES.get('auth')
-    if auth:
-        auth = 1
-    else:
-        auth = 0
 
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
@@ -79,11 +77,6 @@ def user_profile(request,user_id):
 @csrf_exempt
 def update_profile_email(request,user_id):
     auth = request.COOKIES.get('auth')
-    if auth:
-        auth = 1
-    else:
-        auth = 0
-
     if request.method == 'POST':
         form=emailForm(request.POST)
         if form.is_valid():
@@ -111,10 +104,6 @@ def update_profile_email(request,user_id):
 @csrf_exempt
 def update_profile_location(request,user_id):
     auth = request.COOKIES.get('auth')
-    if auth:
-        auth = 1
-    else:
-        auth = 0
 
     if request.method == 'POST':
         form=locationForm(request.POST)
@@ -173,7 +162,7 @@ def login(request):
 
     response = HttpResponseRedirect(next)
     response.set_cookie("auth", authenticator)
-
+    response.set_cookie("username",username)
     return response
 
 def signup(request):
