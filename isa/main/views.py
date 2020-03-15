@@ -8,6 +8,8 @@ from django.forms.models import model_to_dict
 import os
 import hmac
 from django.contrib.auth import hashers
+from django.utils import timezone
+import datetime
 # Create your views here.
 
 # AUTHENTICATOR
@@ -36,6 +38,8 @@ def find_authenticator(request, authenticator):
             auth = Authenticator.objects.get(authenticator = authenticator)
         except:
             return HttpResponse("Authenticator does not exist")
+        if auth.date_created <= timezone.now() - datetime.timedelta(days=7):
+            return HttpResponse("Authenticator does not exist")
         return JsonResponse(model_to_dict(auth))
     else:
         return HttpResponse("Error")
@@ -62,12 +66,14 @@ def create_user(request):
         for k, v in json_data.items():
             if k == 'password':
                 setattr(user, k, hashers.make_password(json_data['password']))
-                print(k)
             else:
                 setattr(user, k, v)
-                print(k)
-        user.save()
-        return JsonResponse(model_to_dict(user))
+        try:
+            Users.objects.get(username=user.username)
+        except:
+            user.save()
+            return JsonResponse(model_to_dict(user))
+        return HttpResponse("ERROR: Username already registered")
     else:
         return HttpResponse("Error")
 

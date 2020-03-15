@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from urllib.error import URLError
 from django.urls import reverse
 from django.shortcuts import redirect
+from django.contrib import messages
 
 
 # import exp_srvc_errors
@@ -144,7 +145,7 @@ def update_profile_location(request,user_id):
 @csrf_exempt
 def login(request):
     if request.method == 'GET':
-        next = request.GET.get('next') or reverse('home')
+        next = request.GET.get('next')
         return render(request, 'web/login.html')
     f =  LoginForm(request.POST)
     if not f.is_valid():
@@ -156,7 +157,14 @@ def login(request):
     login_encode = urllib.parse.urlencode(login_dict).encode('utf-8')
     req1 = urllib.request.Request('http://experience:8000/login/', data=login_encode, method='POST')
     resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
-    resp = json.loads(resp_json1)
+    try:
+        resp = json.loads(resp_json1)
+    except:
+        messages.error(request,'username or password not correct')
+        context = {
+            "messages": messages,
+        }
+        return render(request, 'web/login.html')
 
     next = f.cleaned_data.get('next') or reverse('home')
     if (resp_json1 == 'User does not exist or password incorrect.'): 
@@ -184,6 +192,8 @@ def signup(request):
     resp = json.loads(resp_json1)
 
     next = f.cleaned_data.get('next') or reverse('home')
+    if resp[1] == False:
+        return render(request, 'web/username.html')
     authenticator = resp[1]['authenticator']
 
     response = HttpResponseRedirect(next)
@@ -203,6 +213,11 @@ def logout(request):
 
 @csrf_exempt
 def create_listing(request):
+    auth = request.COOKIES.get('auth')
+    if auth:
+        auth = 1
+    else:
+        auth = 0
 
     auth = request.COOKIES.get('auth')
     if not auth:
@@ -212,6 +227,7 @@ def create_listing(request):
     f = ListingForm(request.POST)
     context = {
             'form': f,
+            'auth': auth,
         }  
     if not f.is_valid():
         print("error")
@@ -221,6 +237,9 @@ def create_listing(request):
     req1 = urllib.request.Request('http://experience:8000/create_listing/', data=listing_encode, method='POST')
     resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
     resp1 = json.loads(resp_json1)
+
+    if(resp_json1 == "Authenticator does not exist"):
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
 
     # # ...
 
