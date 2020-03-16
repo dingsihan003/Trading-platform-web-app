@@ -95,7 +95,14 @@ def user(request,user_id):
     else:
         return HttpResponse("error")
 
+def name_user_get(request,user_name):
+    if request.method == 'GET':
+        users = Users.objects.get(username=user_name)
+        return JsonResponse(model_to_dict(users))
+    else:
+        return HttpResponse("error")
 
+        
 @csrf_exempt
 def update_user(request, user_id):
     if request.method == 'POST':

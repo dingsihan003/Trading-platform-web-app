@@ -54,7 +54,14 @@ def profile_update(request,user_id):
     else:
         return HttpResponse('Error')
 
-
+def name_user_get(request,user_name):
+    if request.method == 'GET':
+        req = urllib.request.Request('http://models:8000/api/v1/users/name/'+ user_name + '/')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        return JsonResponse(resp, safe=False)
+    else:
+        return HttpResponse('Error')
 
          
 @csrf_exempt 

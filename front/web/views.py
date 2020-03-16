@@ -17,32 +17,37 @@ from .forms import *
 # Create your views here.
 def home(request):
     auth = request.COOKIES.get('auth')
+    if not auth:
+        return HttpResponseRedirect(reverse("login") )
     username=request.COOKIES.get('username')
-
-    if auth:
-        auth = 1
-    else:
-        auth = 0
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/home/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
-        
+
+        url='http://experience:8000/users/name/'+str(username)+'/'
+        req2 = urllib.request.Request(url)
+        resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+        resp2 = json.loads(resp_json2)
+        furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
+
         context = {
             'price_listing': resp[0],
             'date_listing': resp[1],
+            'url' : furl,
             'auth': auth,
+
         }
         return render(request,'web/home.html',context)
     else:
         return HttpResponse('Error')
 
 def product_detail(request,product_id):
+
     auth = request.COOKIES.get('auth')
-    if auth:
-        auth = 1
-    else:
-        auth = 0
+    if not auth:
+        return HttpResponseRedirect(reverse("login") )
+
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/products/'+ str(product_id) + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -58,7 +63,8 @@ def product_detail(request,product_id):
 
 def user_profile(request,user_id):
     auth = request.COOKIES.get('auth')
-
+    if not auth:
+        return HttpResponseRedirect(reverse("login") )
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -77,6 +83,8 @@ def user_profile(request,user_id):
 @csrf_exempt
 def update_profile_email(request,user_id):
     auth = request.COOKIES.get('auth')
+    if not auth:
+        return HttpResponseRedirect(reverse("login") )
     if request.method == 'POST':
         form=emailForm(request.POST)
         if form.is_valid():
@@ -104,7 +112,8 @@ def update_profile_email(request,user_id):
 @csrf_exempt
 def update_profile_location(request,user_id):
     auth = request.COOKIES.get('auth')
-
+    if not auth:
+        return HttpResponseRedirect(reverse("login") )
     if request.method == 'POST':
         form=locationForm(request.POST)
         if form.is_valid():
@@ -202,11 +211,6 @@ def logout(request):
 
 @csrf_exempt
 def create_listing(request):
-    auth = request.COOKIES.get('auth')
-    if auth:
-        auth = 1
-    else:
-        auth = 0
 
     auth = request.COOKIES.get('auth')
     if not auth:
