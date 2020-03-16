@@ -20,6 +20,7 @@ def home(request):
     if not auth:
         return HttpResponseRedirect(reverse("login") )
     username=request.COOKIES.get('username')
+
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/home/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -63,7 +64,13 @@ def product_detail(request,product_id):
 
 def user_profile(request,user_id):
     auth = request.COOKIES.get('auth')
-    if not auth:
+    username=request.COOKIES.get('username')
+    url='http://experience:8000/users/name/' + str(username)+'/'
+    req2 = urllib.request.Request(url)
+    resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+    resp2 = json.loads(resp_json2)
+    
+    if not auth or (user_id!=resp2["id"]):
         return HttpResponseRedirect(reverse("login") )
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
@@ -83,7 +90,13 @@ def user_profile(request,user_id):
 @csrf_exempt
 def update_profile_email(request,user_id):
     auth = request.COOKIES.get('auth')
-    if not auth:
+    username=request.COOKIES.get('username')
+    url='http://experience:8000/users/name/' + str(username)+'/'
+    req2 = urllib.request.Request(url)
+    resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+    resp2 = json.loads(resp_json2)
+    
+    if not auth or (user_id!=resp2["id"]):
         return HttpResponseRedirect(reverse("login") )
     if request.method == 'POST':
         form=emailForm(request.POST)
@@ -112,7 +125,13 @@ def update_profile_email(request,user_id):
 @csrf_exempt
 def update_profile_location(request,user_id):
     auth = request.COOKIES.get('auth')
-    if not auth:
+    username=request.COOKIES.get('username')
+    url='http://experience:8000/users/name/' + str(username)+'/'
+    req2 = urllib.request.Request(url)
+    resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+    resp2 = json.loads(resp_json2)
+    
+    if not auth or (user_id!=resp2["id"]):
         return HttpResponseRedirect(reverse("login") )
     if request.method == 'POST':
         form=locationForm(request.POST)
