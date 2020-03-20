@@ -47,6 +47,8 @@ def home(request):
 def product_detail(request,product_id):
 
     auth = request.COOKIES.get('auth')
+    username=request.COOKIES.get('username')
+
     if not auth:
         return HttpResponseRedirect(reverse("login") )
 
@@ -54,9 +56,16 @@ def product_detail(request,product_id):
         req = urllib.request.Request('http://experience:8000/products/'+ str(product_id) + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
+
+        url='http://experience:8000/users/name/'+str(username)+'/'
+        req2 = urllib.request.Request(url)
+        resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+        resp2 = json.loads(resp_json2)
+        furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
         context = {
             'product': resp,
             'auth': auth,
+            'url' : furl
         }
         return render(request,'web/products_detail.html',context)
     else:
@@ -72,7 +81,7 @@ def user_profile(request,user_id):
     resp2 = json.loads(resp_json2)
     
     if not auth or (user_id!=resp2["id"]):
-        return HttpResponseRedirect(reverse("login") )
+        return HttpResponseRedirect(reverse("login"))
     if request.method == 'GET':
         req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -114,9 +123,17 @@ def update_profile_email(request,user_id):
         req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
+
+        url='http://experience:8000/users/name/'+str(username)+'/'
+        req2 = urllib.request.Request(url)
+        resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+        resp2 = json.loads(resp_json2)
+        furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
+
         context = {
             'Users': resp,
             'auth': auth,
+            'url' : furl
         }
         return render(request,'web/email.html',context)
 
@@ -149,9 +166,17 @@ def update_profile_location(request,user_id):
         req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
+
+        url='http://experience:8000/users/name/'+str(username)+'/'
+        req2 = urllib.request.Request(url)
+        resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+        resp2 = json.loads(resp_json2)
+        furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
+
         context = {
             'Users': resp,
             'auth': auth,
+            'url' : furl
         }
         return render(request,'web/location.html',context)
 
@@ -163,8 +188,8 @@ def update_profile_location(request,user_id):
 @csrf_exempt
 def login(request):
     if request.method == 'GET':
-        next = request.GET.get('next')
         return render(request, 'web/login.html')
+
     f =  LoginForm(request.POST)
     if not f.is_valid():
       return render(request, 'web/login.html')
@@ -183,8 +208,13 @@ def login(request):
             "messages": messages,
         }
         return render(request, 'web/login.html')
+    
+    next= request.POST.get('next')
+    if next == "":
+        next=reverse('home')
 
-    next = f.cleaned_data.get('next') or reverse('home')
+
+    # next = f.cleaned_data.get('next') or reverse('home')
     if (resp_json1 == 'User does not exist or password incorrect.'): 
       return render(request, 'web/login.html')
     authenticator = resp['authenticator']
@@ -233,14 +263,23 @@ def logout(request):
 def create_listing(request):
 
     auth = request.COOKIES.get('auth')
+    username=request.COOKIES.get('username')
+
     if not auth:
         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
     # if request.method == 'GET':
     #     return render(request, "web/create_listing.html")
     f = ListingForm(request.POST)
+
+    url='http://experience:8000/users/name/'+str(username)+'/'
+    req2 = urllib.request.Request(url)
+    resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+    resp2 = json.loads(resp_json2)
+    furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
     context = {
             'form': f,
             'auth': auth,
+            'url' : furl
         }  
     if not f.is_valid():
         print("error")
@@ -273,7 +312,4 @@ def forget_password(request):
     else:
         return render(request, "web/forget_password.html",{'form': f})
 
-
-
-#def reset_password(request, activate_code):
 

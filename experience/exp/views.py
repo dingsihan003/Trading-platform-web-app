@@ -108,9 +108,7 @@ def logout(request):
     if request.method == "POST":
         req1 = urllib.request.Request('http://models:8000/api/v1/authenticator/find/'+ request.POST["authenticator"] + '/')
         resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
-        resp1 = json.loads(resp_json1)
-        print(resp1)
-        
+        resp1 = json.loads(resp_json1)        
         req2 = urllib.request.Request('http://models:8000/api/v1/authenticator/delete/'+ str(resp1["authenticator"]+'/'), method='DELETE')
         resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
         return HttpResponse('Deleted')
