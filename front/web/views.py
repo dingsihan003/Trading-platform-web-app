@@ -257,21 +257,23 @@ def create_listing(request):
     return render(request, "web/create_listing_success.html")
 
 def forget_password(request):
+    f = ForgetForm(request.POST)
     if request.method == 'POST':
         f = ForgetForm(request.POST)
         if f.is_valid():
-            email = f.cleaned_data
-            email_encode = urllib.parse.urlencode(email).encode('utf-8')
-            req1 = urllib.request.Request('http://experience:8000/create_listing/', data=email_encode, method='POST')
-            resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
-            resp1 = json.loads(resp_json1)
+            user = f.cleaned_data
+            email_encode = urllib.parse.urlencode(user).encode('utf-8')
+            req1 = urllib.request.Request('http://experience:8000/forget_password/', data=email_encode, method='POST')
+            resp = urllib.request.urlopen(req1).read().decode('utf-8')
+            resp1 = json.loads(resp)
+            return render(request, "web/forget_password.html", {'form': f})
         else:
             f = ForgetForm(request.POST)
         return render(request, "web/forget_password.html", {'form': f})
     else:
-        return render(request, "web/forget_password.html")
+        return render(request, "web/forget_password.html",{'form': f})
 
 
 
-def reset_password(request, activate_code):
+#def reset_password(request, activate_code):
 

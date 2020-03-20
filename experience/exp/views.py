@@ -67,8 +67,8 @@ def name_user_get(request,user_name):
 @csrf_exempt 
 def signup(request):
     if request.method == "POST":
-        res = (request.POST).dict()
-        res_encode = urllib.parse.urlencode(res).encode('utf-8')
+        res1 = (request.POST).dict()
+        res_encode = urllib.parse.urlencode(res1).encode('utf-8')
         req1 = urllib.request.Request('http://models:8000/api/v1/users/create/', data=res_encode, method='POST')
         resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
         try:
@@ -135,27 +135,36 @@ def create_listing(request):
     else:
         return HttpResponse('Error')
 
+@csrf_exempt  
 def forget_password(request):
     if request.method == "POST":
         res = (request.POST).dict()
-        new_encode = urllib.parse.urlencode(res).encode('utf-8')
-        req1 = urllib.request.Request('http://models:8000/api/v1/forget/', data=new_encode, method='POST')
+        username = res["username"]
+        req1 = urllib.request.Request('http://models:8000/api/v1/users/name/'+ str(username)+ '/', method="GET")
         resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
-        resp1 = json.loads(resp_json1)
-        return JsonResponse(resp1, safe=False)
+        return HttpResponse(resp_json1)
+        try:
+            resp1 = json.loads(resp_json1)
+        except:
+            return HttpResponse('User does not exist')
+        req2 = urllib.request.Request('http://models:8000/api/v1/forget/'+ str(request.GET['username'])+ '/')
+        resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+        resp2 = json.loads(resp_json2)
+        return JsonResponse(resp2, safe=False)
+
     else:
         return HttpResponse('Error')
 
-def reset_password(request):
-    if request.method == "POST":
-        res = (request.POST).dict()
-        new_encode = urllib.parse.urlencode(res).encode('utf-8')
-        req1 = urllib.request.Request('http://models:8000/api/v1/forget/', data=new_encode, method='POST')
-        resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
-        resp1 = json.loads(resp_json1)
-        return JsonResponse(resp1, safe=False)
-    else:
-        return HttpResponse('Error')
+# def reset_password(request):
+#     if request.method == "POST":
+#         res = (request.POST).dict()
+#         new_encode = urllib.parse.urlencode(res).encode('utf-8')
+#         req1 = urllib.request.Request('http://models:8000/api/v1/forget/', data=new_encode, method='POST')
+#         resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+#         resp1 = json.loads(resp_json1)
+#         return JsonResponse(resp1, safe=False)
+#     else:
+#         return HttpResponse('Error')
 
 
 

@@ -10,6 +10,7 @@ import hmac
 from django.contrib.auth import hashers
 from django.utils import timezone
 import datetime
+import random
 # Create your views here.
 
 # AUTHENTICATOR
@@ -94,13 +95,14 @@ def user(request,user_id):
         return JsonResponse(model_to_dict(users))
     else:
         return HttpResponse("error")
-
+@csrf_exempt
 def name_user_get(request,user_name):
     if request.method == 'GET':
         users = Users.objects.get(username=user_name)
         return JsonResponse(model_to_dict(users))
     else:
         return HttpResponse("error")
+
 
         
 @csrf_exempt
@@ -131,7 +133,7 @@ def check_user(request):
             return HttpResponse("Invalid")
     else:
         return HttpResponse("Error")
-
+@csrf_exempt
 def code_RQ(codelength=8):
     code=''
     str='AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
@@ -140,14 +142,13 @@ def code_RQ(codelength=8):
         code+=str[random.randint(0,str_len)]
     return code
 
-def forget_password(request):
-    if request.method == 'POST':
-        json_data = request.POST
+@csrf_exempt
+def forget_password(request,username):
+    if request.method == 'GET':
         codeObj= Code()
-        if 'email' in json_data:
-            codeObj.email = json_data['email']
+        user = Users.objects.get(username=username)
+        codeObj.email = user.email
         codeObj.active_code = code_RQ()
-
         try:
             codeObj.save()
             return JsonResponse(model_to_dict(codeObj))
@@ -155,6 +156,22 @@ def forget_password(request):
             return HttpResponse("Invalid Input")
     else:
         return HttpResponse("error")
+
+# def forget_password(request):
+#     if request.method == 'POST':
+#         json_data = request.POST
+#         codeObj= Code()
+#         if 'email' in json_data:
+#             codeObj.email = json_data['email']
+#         codeObj.active_code = code_RQ()
+
+#         try:
+#             codeObj.save()
+#             return JsonResponse(model_to_dict(codeObj))
+#         except:
+#             return HttpResponse("Invalid Input")
+#     else:
+#         return HttpResponse("error")
 
 # PRODUCT SECTION
 
