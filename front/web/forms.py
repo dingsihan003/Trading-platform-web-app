@@ -35,4 +35,4 @@ class ResetForm(forms.Form):
         attrs={"placeholder": "请输入新密码"}
     ))
     repwd = forms.CharField(required=True, label='新密码', widget=forms.PasswordInput(
-        attrs={"placeholder": "请输入新密码"}
+        attrs={"placeholder": "请输入新密码"}))
