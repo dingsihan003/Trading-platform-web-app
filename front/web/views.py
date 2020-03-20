@@ -9,6 +9,7 @@ from urllib.error import URLError
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib import messages
+import random
 
 
 # import exp_srvc_errors
@@ -253,19 +254,24 @@ def create_listing(request):
     if(resp_json1 == "Authenticator does not exist"):
         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
 
-    # # ...
-
-    # # Send validated information to our experience layer
-    # resp = create_listing_exp_api(auth, ...)
-
-    # # Check if the experience layer said they gave us incorrect information
-    # if resp and not resp['ok']:
-    #     if resp['error'] == exp_srvc_errors.E_UNKNOWN_AUTH:
-    #         # Experience layer reports that the user had an invalid authenticator --
-    #         #   treat like user not logged in
-    #         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing")
-
-    # # ...
-
     return render(request, "web/create_listing_success.html")
+
+def forget_password(request):
+    if request.method == 'POST':
+        f = ForgetForm(request.POST)
+        if f.is_valid():
+            email = f.cleaned_data
+            email_encode = urllib.parse.urlencode(email).encode('utf-8')
+            req1 = urllib.request.Request('http://experience:8000/create_listing/', data=email_encode, method='POST')
+            resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+            resp1 = json.loads(resp_json1)
+        else:
+            f = ForgetForm(request.POST)
+        return render(request, "web/forget_password.html", {'form': f})
+    else:
+        return render(request, "web/forget_password.html")
+
+
+
+def reset_password(request, activate_code):
 

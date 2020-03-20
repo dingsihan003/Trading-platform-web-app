@@ -13,6 +13,10 @@ class Users(models.Model):
     location = models.CharField(max_length=50)
     password = models.CharField(max_length=500)
 
+class Code(models.Model):
+    email = models.CharField(max_length=50)
+    active_code = models.CharField(max_length=50)
+
 class Product(models.Model):
     product_title = models.CharField(max_length=200)
     product_base_price = models.DecimalField(max_digits=12, decimal_places=2)

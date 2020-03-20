@@ -135,5 +135,28 @@ def create_listing(request):
     else:
         return HttpResponse('Error')
 
+def forget_password(request):
+    if request.method == "POST":
+        res = (request.POST).dict()
+        new_encode = urllib.parse.urlencode(res).encode('utf-8')
+        req1 = urllib.request.Request('http://models:8000/api/v1/forget/', data=new_encode, method='POST')
+        resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+        resp1 = json.loads(resp_json1)
+        return JsonResponse(resp1, safe=False)
+    else:
+        return HttpResponse('Error')
+
+def reset_password(request):
+    if request.method == "POST":
+        res = (request.POST).dict()
+        new_encode = urllib.parse.urlencode(res).encode('utf-8')
+        req1 = urllib.request.Request('http://models:8000/api/v1/forget/', data=new_encode, method='POST')
+        resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+        resp1 = json.loads(resp_json1)
+        return JsonResponse(resp1, safe=False)
+    else:
+        return HttpResponse('Error')
+
+
 
 
