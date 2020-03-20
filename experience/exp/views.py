@@ -119,12 +119,6 @@ def logout(request):
 def create_listing(request):
     if request.method == "POST":
         res = (request.POST).dict()
-        auth = res["authenticator"]
-        req = urllib.request.Request('http://models:8000/api/v1/authenticator/find/' 
-                + str(auth) + '/', method="GET")
-        resp = urllib.request.urlopen(req, timeout=5).read().decode('utf-8')
-        if resp == "Authenticator does not exist":
-            return JsonResponse(resp, safe=False)
         listing_encode = urllib.parse.urlencode(res).encode('utf-8')
         req1 = urllib.request.Request('http://models:8000/api/v1/products/create/', data=listing_encode, method='POST')
         resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')

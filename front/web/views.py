@@ -290,9 +290,6 @@ def create_listing(request):
     resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
     resp1 = json.loads(resp_json1)
 
-    if(resp_json1 == "Authenticator does not exist"):
-        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
-
     return render(request, "web/create_listing_success.html")
 
 def forget_password(request):
