@@ -103,6 +103,16 @@ def name_user_get(request,user_name):
     else:
         return HttpResponse("error")
 
+@csrf_exempt
+def find_user(request):
+    if request.method == 'POST':
+        try:
+            user = Users.objects.get(username=request.POST['username'])
+            return HttpResponse("Valid")
+        except:
+            return HttpResponse("Invalid")
+    else:
+        return HttpResponse("Error")
 
         
 @csrf_exempt

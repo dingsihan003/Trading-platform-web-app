@@ -131,8 +131,8 @@ def create_listing(request):
 def forget_password(request):
     if request.method == "POST":
         res = (request.POST).dict()
-        username = res["username"]
-        req1 = urllib.request.Request('http://models:8000/api/v1/users/name/'+ str(username)+ '/', method="GET")
+        listing_encode = urllib.parse.urlencode(res).encode('utf-8')
+        req1 = urllib.request.Request('http://models:8000/api/v1/users/find/', data = listing_encode, method="POST")
         resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
         return HttpResponse(resp_json1)
         try:

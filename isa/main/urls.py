@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/v1/users/',views.all_user, name='all_user'),
     path('api/v1/forget/<str:username>/',views.forget_password, name='forget_pass'),
     path('api/v1/users/<int:user_id>/',views.user, name='user'),
+    path('api/v1/users/find/',views.find_user, name='find_user'),
     path('api/v1/users/name/<str:user_name>/',views.name_user_get, name='name_user_get'),
     path('api/v1/users/create/',views.create_user, name='create_user'),
     path('api/v1/users/check/',views.check_user, name='check_user'),
