@@ -18,8 +18,6 @@ from .forms import *
 # Create your views here.
 def home(request):
     auth = request.COOKIES.get('auth')
-    if not auth:
-        return HttpResponseRedirect(reverse("login") )
     username=request.COOKIES.get('username')
 
     if request.method == 'GET':
@@ -213,7 +211,6 @@ def login(request):
     if next == "":
         next=reverse('home')
 
-
     # next = f.cleaned_data.get('next') or reverse('home')
     if (resp_json1 == 'User does not exist or password incorrect.'): 
       return render(request, 'web/login.html')
@@ -293,20 +290,41 @@ def create_listing(request):
     return render(request, "web/create_listing_success.html")
 
 def forget_password(request):
+    auth = request.COOKIES.get('auth')
+    if auth:
+        return HttpResponseRedirect(reverse("home") )
     f = ForgetForm(request.POST)
     if request.method == 'POST':
         f = ForgetForm(request.POST)
         if f.is_valid():
-            user = f.cleaned_data
-            email_encode = urllib.parse.urlencode(user).encode('utf-8')
-            req1 = urllib.request.Request('http://experience:8000/forget_password/', data=email_encode, method='POST')
+            username = f.cleaned_data['username']
+            username_encode = urllib.parse.urlencode({"username": username}).encode('utf-8')
+            req1 = urllib.request.Request('http://experience:8000/forget_password/', data=username_encode, method='POST')
             resp = urllib.request.urlopen(req1).read().decode('utf-8')
-            resp1 = json.loads(resp)
-            return render(request, "web/forget_password.html", {'form': f})
+            try:
+                json.loads(resp)
+                return render(request, "web/forget_password_success.html")
+            except:
+                return render(request, "web/forget_password_fail.html")
+
         else:
             f = ForgetForm(request.POST)
         return render(request, "web/forget_password.html", {'form': f})
     else:
         return render(request, "web/forget_password.html",{'form': f})
+
+def reset_password(request,active_code):
+    f = ResetForm(request.POST)
+    if request.method == 'POST':
+        f = ResetForm(request.POST)
+        if f.is_valid():
+            password = f.cleaned_data['password']
+            password_encode = urllib.parse.urlencode({"password": password}).encode('utf-8')
+            req1 = urllib.request.Request('http://experience:8000/reset_password/'+str(active_code)+'/', data=password_encode, method='POST')
+            resp = urllib.request.urlopen(req1).read().decode('utf-8')
+            return render(request, "web/reset_password_success.html")
+    else:
+        return render(request, "web/reset_password.html",{'form': f})
+        
 
 

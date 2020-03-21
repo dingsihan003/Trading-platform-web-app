@@ -18,6 +18,7 @@ urlpatterns = [
     path('logout/',views.logout, name='logout'),
     path('create_listing/',views.create_listing, name='create_listing'),
     path('forget_password/',views.forget_password, name='forget_password'),
+    path('reset_password/<str:active_code>/',views.reset_password, name='reset_password'),
 
     path('users/<int:user_id>/',views.user_profile, name='user_profile')
 ]

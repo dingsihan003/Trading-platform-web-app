@@ -6,6 +6,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from urllib.error import URLError
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Create your views here.
 def home(request):
@@ -134,29 +136,31 @@ def forget_password(request):
         listing_encode = urllib.parse.urlencode(res).encode('utf-8')
         req1 = urllib.request.Request('http://models:8000/api/v1/users/find/', data = listing_encode, method="POST")
         resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
-        return HttpResponse(resp_json1)
-        try:
-            resp1 = json.loads(resp_json1)
-        except:
-            return HttpResponse('User does not exist')
-        req2 = urllib.request.Request('http://models:8000/api/v1/forget/'+ str(request.GET['username'])+ '/')
-        resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
-        resp2 = json.loads(resp_json2)
-        return JsonResponse(resp2, safe=False)
+        if resp_json1 == "Valid":
+            req2 = urllib.request.Request('http://models:8000/api/v1/forget/',data = listing_encode, method="POST")
+            resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+            resp2 = json.loads(resp_json2)
+            subject = "Reset Password"
+            message = "Please go to http://127.0.0.1:8000/reset_password/"+ str(resp2['active_code'])+ "/ to reset your password"
+            send_mail(subject, message,'isamarketplace2020@gmail.com', [resp2['email']])
+
+            return JsonResponse(resp2, safe=False)
+        else:
+            return HttpResponse("User does not exist")
 
     else:
         return HttpResponse('Error')
-
-# def reset_password(request):
-#     if request.method == "POST":
-#         res = (request.POST).dict()
-#         new_encode = urllib.parse.urlencode(res).encode('utf-8')
-#         req1 = urllib.request.Request('http://models:8000/api/v1/forget/', data=new_encode, method='POST')
-#         resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
-#         resp1 = json.loads(resp_json1)
-#         return JsonResponse(resp1, safe=False)
-#     else:
-#         return HttpResponse('Error')
+@csrf_exempt 
+def reset_password(request,active_code):
+    if request.method == "POST":
+        res = (request.POST).dict()
+        password_encode = urllib.parse.urlencode(res).encode('utf-8')
+        req1 = urllib.request.Request('http://models:8000/api/v1/reset/'+str(active_code)+'/', data=password_encode, method='POST')
+        resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+        resp1 = json.loads(resp_json1)
+        return JsonResponse(resp1, safe=False)
+    else:
+        return HttpResponse('Error')
 
 
 

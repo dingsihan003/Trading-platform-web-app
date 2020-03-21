@@ -71,10 +71,11 @@ def create_user(request):
                 setattr(user, k, v)
         try:
             Users.objects.get(username=user.username)
+            Users.objects.get(email=user.email)
         except:
             user.save()
             return JsonResponse(model_to_dict(user))
-        return HttpResponse("ERROR: Username already registered")
+        return HttpResponse("ERROR: Username or email already registered")
     else:
         return HttpResponse("Error")
 
@@ -153,10 +154,10 @@ def code_RQ(codelength=8):
     return code
 
 @csrf_exempt
-def forget_password(request,username):
-    if request.method == 'GET':
+def forget_password(request):
+    if request.method == 'POST':
         codeObj= Code()
-        user = Users.objects.get(username=username)
+        user = Users.objects.get(username=request.POST['username'])
         codeObj.email = user.email
         codeObj.active_code = code_RQ()
         try:
@@ -166,22 +167,19 @@ def forget_password(request,username):
             return HttpResponse("Invalid Input")
     else:
         return HttpResponse("error")
-
-# def forget_password(request):
-#     if request.method == 'POST':
-#         json_data = request.POST
-#         codeObj= Code()
-#         if 'email' in json_data:
-#             codeObj.email = json_data['email']
-#         codeObj.active_code = code_RQ()
-
-#         try:
-#             codeObj.save()
-#             return JsonResponse(model_to_dict(codeObj))
-#         except:
-#             return HttpResponse("Invalid Input")
-#     else:
-#         return HttpResponse("error")
+@csrf_exempt
+def reset_password(request,active_code):
+    if request.method == 'POST':
+        code = Code.objects.get(active_code = active_code)
+        user = Users.objects.get(email=code.email)
+        setattr(user, 'password', hashers.make_password(request.POST['password']))
+        try:
+            user.save()
+            return JsonResponse(model_to_dict(user))
+        except:
+            return HttpResponse("Invalid Input")
+    else:
+        return HttpResponse("error")
 
 # PRODUCT SECTION
 

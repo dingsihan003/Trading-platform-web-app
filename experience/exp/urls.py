@@ -17,4 +17,5 @@ urlpatterns = [
     path('signup/',views.signup, name='signup'),
     path('create_listing/',views.create_listing, name='create_listing'),
     path('forget_password/',views.forget_password, name='forget_password'),
+    path('reset_password/<str:active_code>/',views.reset_password, name='reset_password'),
 ]

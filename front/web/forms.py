@@ -24,3 +24,6 @@ class ListingForm(forms.Form):
 
 class ForgetForm(forms.Form):
     username = forms.CharField(label='Username', max_length=100)
+
+class ResetForm(forms.Form):
+    password = forms.CharField(label='Password', max_length=100)
