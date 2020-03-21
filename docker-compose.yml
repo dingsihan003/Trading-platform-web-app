@@ -45,7 +45,7 @@ services:
       - "8000:8000"
     volumes:
       - ./front:/app
-    command: "mod_wsgi-express start-server --reload-on-changes ./front/wsgi.py"
+    command: "mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./front/wsgi.py"
 
 networks:
   backend:

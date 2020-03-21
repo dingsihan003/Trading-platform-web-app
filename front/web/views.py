@@ -322,7 +322,10 @@ def reset_password(request,active_code):
             password_encode = urllib.parse.urlencode({"password": password}).encode('utf-8')
             req1 = urllib.request.Request('http://experience:8000/reset_password/'+str(active_code)+'/', data=password_encode, method='POST')
             resp = urllib.request.urlopen(req1).read().decode('utf-8')
-            return render(request, "web/reset_password_success.html")
+            if resp == "Error":
+                return render(request,"web/link_expired.html")
+            else:
+                return render(request, "web/reset_password_success.html")
     else:
         return render(request, "web/reset_password.html",{'form': f})
         

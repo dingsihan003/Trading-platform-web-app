@@ -155,10 +155,14 @@ def reset_password(request,active_code):
     if request.method == "POST":
         res = (request.POST).dict()
         password_encode = urllib.parse.urlencode(res).encode('utf-8')
-        req1 = urllib.request.Request('http://models:8000/api/v1/reset/'+str(active_code)+'/', data=password_encode, method='POST')
-        resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
-        resp1 = json.loads(resp_json1)
-        return JsonResponse(resp1, safe=False)
+        try:
+            req1 = urllib.request.Request('http://models:8000/api/v1/reset/'+str(active_code)+'/', data=password_encode, method='POST')
+            resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
+            resp1 = json.loads(resp_json1)
+            return JsonResponse(resp1, safe=False)
+        except:
+            return HttpResponse('Error')
+
     else:
         return HttpResponse('Error')
 

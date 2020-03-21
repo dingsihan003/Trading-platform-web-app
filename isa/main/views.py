@@ -156,10 +156,15 @@ def code_RQ(codelength=8):
 @csrf_exempt
 def forget_password(request):
     if request.method == 'POST':
-        codeObj= Code()
         user = Users.objects.get(username=request.POST['username'])
-        codeObj.email = user.email
-        codeObj.active_code = code_RQ()
+        try:
+            codeObj=Code.objects.get(email=user.email)
+            codeObj.active_code=code_RQ()
+
+        except:
+            codeObj= Code()
+            codeObj.email = user.email
+            codeObj.active_code = code_RQ()
         try:
             codeObj.save()
             return JsonResponse(model_to_dict(codeObj))
@@ -170,9 +175,13 @@ def forget_password(request):
 @csrf_exempt
 def reset_password(request,active_code):
     if request.method == 'POST':
-        code = Code.objects.get(active_code = active_code)
-        user = Users.objects.get(email=code.email)
-        setattr(user, 'password', hashers.make_password(request.POST['password']))
+        try:
+            code = Code.objects.get(active_code = active_code)
+            user = Users.objects.get(email=code.email)
+            setattr(user, 'password', hashers.make_password(request.POST['password']))
+        except:
+            return HttpResponse("error")
+
         try:
             user.save()
             return JsonResponse(model_to_dict(user))
