@@ -72,10 +72,10 @@ def create_user(request):
         try:
             Users.objects.get(username=user.username)
             Users.objects.get(email=user.email)
+            return HttpResponse("ERROR: Username or email already registered")
         except:
             user.save()
             return JsonResponse(model_to_dict(user))
-        return HttpResponse("ERROR: Username or email already registered")
     else:
         return HttpResponse("Error")
 
