@@ -95,50 +95,50 @@ def user_profile(request,user_id):
 
 
 
-@csrf_exempt
-def update_profile_email(request,user_id):
-    auth = request.COOKIES.get('auth')
-    username=request.COOKIES.get('username')
-    url='http://experience:8000/users/name/' + str(username)+'/'
-    req2 = urllib.request.Request(url)
-    resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
-    resp2 = json.loads(resp_json2)
+# @csrf_exempt
+# def update_profile_email(request,user_id):
+#     auth = request.COOKIES.get('auth')
+#     username=request.COOKIES.get('username')
+#     url='http://experience:8000/users/name/' + str(username)+'/'
+#     req2 = urllib.request.Request(url)
+#     resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+#     resp2 = json.loads(resp_json2)
     
-    if not auth or (user_id!=resp2["id"]):
-        return HttpResponseRedirect(reverse("login") )
-    if request.method == 'POST':
-        form=emailForm(request.POST)
-        if form.is_valid():
-            info=form.cleaned_data
-            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
-            req = urllib.request.Request('http://experience:8000/users/update/' + str(user_id )+ '/', data=post_encoded, method='POST')
-            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-            resp = json.loads(resp_json)
-            post_encoded = urllib.parse.urlencode(info).encode('utf-8')
-        else:
-            return render(request,'web/invalid_email.html')
-    else:
-        req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
-        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-        resp = json.loads(resp_json)
+#     if not auth or (user_id!=resp2["id"]):
+#         return HttpResponseRedirect(reverse("login") )
+#     if request.method == 'POST':
+#         form=emailForm(request.POST)
+#         if form.is_valid():
+#             info=form.cleaned_data
+#             post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+#             req = urllib.request.Request('http://experience:8000/users/update/' + str(user_id )+ '/', data=post_encoded, method='POST')
+#             resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+#             resp = json.loads(resp_json)
+#             post_encoded = urllib.parse.urlencode(info).encode('utf-8')
+#         else:
+#             return render(request,'web/invalid_email.html')
+#     else:
+#         req = urllib.request.Request('http://experience:8000/users/'+ str(user_id) + '/')
+#         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+#         resp = json.loads(resp_json)
 
-        url='http://experience:8000/users/name/'+str(username)+'/'
-        req2 = urllib.request.Request(url)
-        resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
-        try:
-            resp2 = json.loads(resp_json2)
-            furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
-        except:
-            furl = '#'
+#         url='http://experience:8000/users/name/'+str(username)+'/'
+#         req2 = urllib.request.Request(url)
+#         resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+#         try:
+#             resp2 = json.loads(resp_json2)
+#             furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
+#         except:
+#             furl = '#'
 
-        context = {
-            'Users': resp,
-            'auth': auth,
-            'url' : furl
-        }
-        return render(request,'web/email.html',context)
+#         context = {
+#             'Users': resp,
+#             'auth': auth,
+#             'url' : furl
+#         }
+#         return render(request,'web/email.html',context)
 
-    return redirect('/users/'+ str(user_id) + '/')
+#     return redirect('/users/'+ str(user_id) + '/')
     
 
 @csrf_exempt

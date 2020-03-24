@@ -184,6 +184,7 @@ def reset_password(request,active_code):
         try:
             code = Code.objects.get(active_code = active_code)
             user = Users.objects.get(email=code.email)
+            print("ccc")
             setattr(user, 'password', hashers.make_password(request.POST['password']))
         except:
             return HttpResponse("error")
