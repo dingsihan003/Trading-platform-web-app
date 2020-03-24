@@ -25,19 +25,27 @@ def home(request):
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
 
-        url='http://experience:8000/users/name/'+str(username)+'/'
-        req2 = urllib.request.Request(url)
-        resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
-        resp2 = json.loads(resp_json2)
-        furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
+        try:
+            url='http://experience:8000/users/name/'+str(username)+'/'
+            req2 = urllib.request.Request(url)
+            resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+            resp2 = json.loads(resp_json2)
+            furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
+            context = {
+                'price_listing': resp[0],
+                'date_listing': resp[1],
+                'url' : furl,
+                'auth': auth,
 
-        context = {
-            'price_listing': resp[0],
-            'date_listing': resp[1],
-            'url' : furl,
-            'auth': auth,
+            }
+        except:
+            context = {
+                'price_listing': resp[0],
+                'date_listing': resp[1],
+                'url' : furl,
+                'auth': auth,
 
-        }
+            }
         return render(request,'web/home.html',context)
     else:
         return HttpResponse('Error')
@@ -55,6 +63,7 @@ def product_detail(request,product_id):
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
 
+        
         url='http://experience:8000/users/name/'+str(username)+'/'
         req2 = urllib.request.Request(url)
         resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
@@ -73,6 +82,7 @@ def product_detail(request,product_id):
 def user_profile(request,user_id):
     auth = request.COOKIES.get('auth')
     username=request.COOKIES.get('username')
+
     url='http://experience:8000/users/name/' + str(username)+'/'
     req2 = urllib.request.Request(url)
     resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
