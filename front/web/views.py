@@ -125,8 +125,11 @@ def update_profile_email(request,user_id):
         url='http://experience:8000/users/name/'+str(username)+'/'
         req2 = urllib.request.Request(url)
         resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
-        resp2 = json.loads(resp_json2)
-        furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
+        try:
+            resp2 = json.loads(resp_json2)
+            furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
+        except:
+            furl = '#'
 
         context = {
             'Users': resp,
@@ -168,8 +171,11 @@ def update_profile_location(request,user_id):
         url='http://experience:8000/users/name/'+str(username)+'/'
         req2 = urllib.request.Request(url)
         resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
-        resp2 = json.loads(resp_json2)
-        furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
+        try:
+            resp2 = json.loads(resp_json2)
+            furl='http://127.0.0.1:8000/users/'+str(resp2["id"]) + '/'
+        except:
+            furl = "#"
 
         context = {
             'Users': resp,

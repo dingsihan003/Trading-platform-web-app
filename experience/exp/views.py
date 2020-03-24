@@ -60,8 +60,11 @@ def name_user_get(request,user_name):
     if request.method == 'GET':
         req = urllib.request.Request('http://models:8000/api/v1/users/name/'+ user_name + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-        resp = json.loads(resp_json)
-        return JsonResponse(resp, safe=False)
+        try:
+            resp = json.loads(resp_json)
+            return JsonResponse(resp, safe=False)
+        except:
+            return HttpResponse('Error')
     else:
         return HttpResponse('Error')
 

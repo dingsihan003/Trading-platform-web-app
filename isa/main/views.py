@@ -99,8 +99,11 @@ def user(request,user_id):
 @csrf_exempt
 def name_user_get(request,user_name):
     if request.method == 'GET':
-        users = Users.objects.get(username=user_name)
-        return JsonResponse(model_to_dict(users))
+        try:
+            users = Users.objects.get(username=user_name)
+            return JsonResponse(model_to_dict(users))
+        except:
+            return HttpResponse("User does not exist")
     else:
         return HttpResponse("error")
 
