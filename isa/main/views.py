@@ -137,7 +137,10 @@ def update_user(request, user_id):
 @csrf_exempt
 def check_user(request):
     if request.method == 'POST':
-        user = Users.objects.get(username=request.POST['username'])
+        try:
+            user = Users.objects.get(username=request.POST['username'])
+        except:
+            return HttpResponse("Invalid")
         if hashers.check_password(request.POST['password'], user.password):
             return HttpResponse("Valid")
         else:
