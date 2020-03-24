@@ -42,7 +42,6 @@ def home(request):
             context = {
                 'price_listing': resp[0],
                 'date_listing': resp[1],
-                'url' : furl,
                 'auth': auth,
 
             }
