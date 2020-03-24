@@ -52,7 +52,10 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="{% url 'home' %}">Home</a></li>
+        {% if auth %}
         <li class="active"><a href= {{url}} >Profile</a></li>
+        {% else %}
+        <li class="active"><a href= # >Profile</a></li>
         <li class="active"><a href="{% url 'create_listing' %}">Create Listing</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
