@@ -8,8 +8,27 @@ from django.views.decorators.csrf import csrf_exempt
 from urllib.error import URLError
 from django.core.mail import send_mail
 from django.conf import settings
+from kafka import KafkaProducer
+from elasticsearch import Elasticsearch
+
+
+producer = KafkaProducer(bootstrap_servers='kafka:9092')
+producer_log = KafkaProducer(bootstrap_servers='kafka:9092')
+es = Elasticsearch(['es']) 
 
 # Create your views here.
+@csrf_exempt
+def get_search_result(request):
+  if request.method == "GET":
+    query = request.GET.get("query")
+    es_resp = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
+    resp =  es_resp['hits']['hits']
+    results = sorted(resp, key=lambda k:k['_score'], reverse = True)
+    results_source = [result['_source'] for result in results]
+    return JsonResponse({"results":results_source},safe=False)
+  if request.method == 'POST':
+    return HttpResponse('Error')
+
 def home(request):
     if request.method == 'GET':
         req1 = urllib.request.Request('http://models:8000/api/v1/pricelisting/')
@@ -128,6 +147,10 @@ def create_listing(request):
         req1 = urllib.request.Request('http://models:8000/api/v1/products/create/', data=listing_encode, method='POST')
         resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
         resp1 = json.loads(resp_json1)
+        print(resp1)
+        res['id'] = resp1['id']
+        print(res)
+        producer.send('listing', json.dumps(res).encode('utf-8'))
         return JsonResponse(resp1, safe=False)
     else:
         return HttpResponse('Error')

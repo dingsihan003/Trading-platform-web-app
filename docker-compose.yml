@@ -47,7 +47,46 @@ services:
       - ./front:/app
     command: "mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./front/wsgi.py"
 
+  batch:
+    image: tp33/django
+    container_name: batch
+    depends_on:
+        - kafka
+        - es
+    volumes:
+        - ./batch:/app
+        - ./data:/tmp/data
+    networks:
+        - batch_network
+    restart: on-failure
+    command: bash -c "
+                  python3 -u new_listing.py
+                  "
+
+  kafka:
+    image: spotify/kafka
+    container_name: kafka
+    networks:
+      - batch_network
+      - service_mesh
+    environment:
+      ADVERTISED_HOST: kafka
+      ADVERTISED_PORT: 9092
+    hostname: kafka
+
+  es:
+    image: elasticsearch:7.4.0
+    container_name: es
+    environment:
+        - discovery.type=single-node
+    networks:
+        - service_mesh
+        - batch_network
+    ports:
+        - "9200:9200"
+
 networks:
   backend:
   public:
   service_mesh:
+  batch_network:

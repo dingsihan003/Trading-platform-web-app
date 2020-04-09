@@ -1,0 +1,31 @@
+{% extends 'web/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="justify-content-center mb-5">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h1>Search Result</h1>
+                <form action="/search_result/" method = "get" class="form-inline my-2 my-lg-0">
+                  <input class="form-control mr-sm-2" type="search" name="q" value="{{request.GET.q}}" placeholder="Search By Popularity" aria-label="SearchPop">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search By Popularity</button>
+                </form>
+            </div>
+            <div class="card-body">
+                {% if results %}
+                <div class="list-group">
+                    {% for result in results %}
+            
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{result.product_title}}</h5>
+                            <small>{{result.product_base_price}}</small>
+                        </div>
+                            <p class="mb-1">{{result.product_description}}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
