@@ -27,6 +27,17 @@ def search_result(request):
     print(resp)
     return render(request, 'web/search.html',resp)
 
+def pop_search_result(request):
+  if request.method == "GET":
+    query = request.GET.get('q','')
+    get_encoded = urllib.parse.urlencode({"query":query})
+    req = urllib.request.Request('http://experience:8000/get_pop_search_result/?' + get_encoded)
+    print(get_encoded)
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    print(resp)
+    return render(request, 'web/search.html',resp)
+
 def home(request):
     auth = request.COOKIES.get('auth')
     username=request.COOKIES.get('username')

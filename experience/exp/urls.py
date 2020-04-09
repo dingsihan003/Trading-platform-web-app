@@ -19,4 +19,5 @@ urlpatterns = [
     path('forget_password/',views.forget_password, name='forget_password'),
     path('reset_password/<str:active_code>/',views.reset_password, name='reset_password'),
     path('get_search_result/', views.get_search_result, name="get_search_result"),
+    path('get_pop_search_result/', views.get_pop_search_result, name="get_pop_search_result"),
 ]

@@ -29,6 +29,20 @@ def get_search_result(request):
   if request.method == 'POST':
     return HttpResponse('Error')
 
+@csrf_exempt
+def get_pop_search_result(request):
+  if request.method == "GET":
+    query = request.GET.get("query")
+    es_resp = es.search(index='listing_index', body={"query": {"function_score": {"query": {"query_string": {"query": query}},"field_value_factor": {"field": "visits","modifier": "log1p","missing": 0.1}}}, 'size':10}
+)
+    resp =  es_resp['hits']['hits']
+    print(resp)
+    results = sorted(resp, key=lambda k:k['_score'], reverse = True)
+    results_source = [result['_source'] for result in results]
+    return JsonResponse({"results":results_source},safe=False)
+  if request.method == 'POST':
+    return HttpResponse('Error')
+
 def home(request):
     if request.method == 'GET':
         req1 = urllib.request.Request('http://models:8000/api/v1/pricelisting/')
@@ -50,7 +64,6 @@ def product_detail(request,product_id):
         resp = json.loads(resp_json)
         if request.GET.get("auth"):
             data = {'user_name':request.GET.get("user_name"), "item_id":product_id}
-            print(data)
             producer_log.send('log', json.dumps(data).encode('utf-8'))
         return JsonResponse(resp, safe=False)
     else:

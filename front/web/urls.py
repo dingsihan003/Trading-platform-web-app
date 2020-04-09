@@ -22,4 +22,6 @@ urlpatterns = [
 
     path('users/<int:user_id>/',views.user_profile, name='user_profile'),
     path('search_result/', views.search_result, name="search_result"),
+    path('search_result/', views.search_result, name="search_result"),
+    path('search_pop_result/', views.pop_search_result, name="search_pop_result"),
 ]
