@@ -26,7 +26,7 @@ def search_result(request):
     resp = json.loads(resp_json)
     print(resp)
     return render(request, 'web/search.html',resp)
-    
+
 def home(request):
     auth = request.COOKIES.get('auth')
     username=request.COOKIES.get('username')
@@ -64,12 +64,16 @@ def product_detail(request,product_id):
 
     auth = request.COOKIES.get('auth')
     username=request.COOKIES.get('username')
+    item_data = {"user_name":username}
+    if auth:
+      item_data["auth"] = auth
 
     if not auth:
         return HttpResponseRedirect(reverse("login") )
 
     if request.method == 'GET':
-        req = urllib.request.Request('http://experience:8000/products/'+ str(product_id) + '/')
+        get_encoded = urllib.parse.urlencode(item_data)
+        req = urllib.request.Request('http://experience:8000/products/'+ str(product_id) + '/?'+get_encoded)
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
 
