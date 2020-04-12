@@ -59,7 +59,9 @@ services:
     networks:
         - batch_network
     restart: on-failure
-    command: bash -c "python3 -u new_listing.py && python3 -u update_counts.py && python3 -u view_counts.py"
+    command: bash -c "python3 -u new_listing.py &
+                      python3 -u update_counts.py &
+                      python3 -u view_counts.py"
 
   kafka:
     image: spotify/kafka
