@@ -23,7 +23,7 @@ def get_search_result(request):
     query = request.GET.get("query")
     es_resp = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
     resp =  es_resp['hits']['hits']
-    results = sorted(resp, key=lambda k:k['_score'], reverse = True)
+    results = sorted(resp, key=lambda k:k['_source']['visits'], reverse = True)
     results_source = [result['_source'] for result in results]
     return JsonResponse({"results":results_source},safe=False)
   if request.method == 'POST':
@@ -37,7 +37,7 @@ def get_pop_search_result(request):
 )
     resp =  es_resp['hits']['hits']
     print(resp)
-    results = sorted(resp, key=lambda k:k['_score'], reverse = True)
+    results = sorted(resp, key=lambda k:k['_source']['visits'], reverse = True)
     results_source = [result['_source'] for result in results]
     return JsonResponse({"results":results_source},safe=False)
   if request.method == 'POST':

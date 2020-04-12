@@ -1,8 +1,9 @@
 from kafka import KafkaConsumer
 from elasticsearch import Elasticsearch
-es = Elasticsearch(['es'])
 import json
 import time
+
+es = Elasticsearch(['es'])
 while(True):
     try:
         consumer = KafkaConsumer('listing', group_id='listing-indexer', bootstrap_servers=['kafka:9092'])
