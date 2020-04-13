@@ -35,5 +35,9 @@ def update_counts():
   f.close()
 
 while True:
-  update_counts()
+  try:
+    update_counts()
+  except:
+    print("retry")
+  print("read to sleep")
   time.sleep(60)
