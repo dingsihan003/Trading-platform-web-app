@@ -115,7 +115,7 @@ def signup(request):
         try:
             resp1 = json.loads(resp_json1)
         except:
-            return JsonResponse([False,False], safe=False)
+            return JsonResponse(False, safe=False)
 
         # username_encode = urllib.parse.urlencode({"username": request.POST["username"]}).encode('utf-8')
         # req2 = urllib.request.Request('http://models:8000/api/v1/authenticator/create/', data=username_encode, method='POST')

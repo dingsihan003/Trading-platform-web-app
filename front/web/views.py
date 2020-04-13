@@ -278,7 +278,7 @@ def signup(request):
     resp = json.loads(resp_json1)
 
     next = f.cleaned_data.get('next') or reverse('login')
-    if resp[1] == False:
+    if resp == False:
         return render(request, 'web/username.html')
     # authenticator = resp[1]['authenticator']
 
