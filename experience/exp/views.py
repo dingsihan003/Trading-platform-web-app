@@ -117,12 +117,12 @@ def signup(request):
         except:
             return JsonResponse([False,False], safe=False)
 
-        username_encode = urllib.parse.urlencode({"username": request.POST["username"]}).encode('utf-8')
-        req2 = urllib.request.Request('http://models:8000/api/v1/authenticator/create/', data=username_encode, method='POST')
-        resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
-        resp2 = json.loads(resp_json2)
+        # username_encode = urllib.parse.urlencode({"username": request.POST["username"]}).encode('utf-8')
+        # req2 = urllib.request.Request('http://models:8000/api/v1/authenticator/create/', data=username_encode, method='POST')
+        # resp_json2 = urllib.request.urlopen(req2).read().decode('utf-8')
+        # resp2 = json.loads(resp_json2)
 
-        return JsonResponse([resp1,resp2], safe=False)
+        return JsonResponse(resp1, safe=False)
     else:
         return HttpResponse('Error')
 

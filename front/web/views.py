@@ -277,13 +277,13 @@ def signup(request):
     resp_json1 = urllib.request.urlopen(req1).read().decode('utf-8')
     resp = json.loads(resp_json1)
 
-    next = f.cleaned_data.get('next') or reverse('home')
+    next = f.cleaned_data.get('next') or reverse('login')
     if resp[1] == False:
         return render(request, 'web/username.html')
-    authenticator = resp[1]['authenticator']
+    # authenticator = resp[1]['authenticator']
 
     response = HttpResponseRedirect(next)
-    response.set_cookie("auth", authenticator)
+    # response.set_cookie("auth", authenticator)
 
     return response
 @csrf_exempt
