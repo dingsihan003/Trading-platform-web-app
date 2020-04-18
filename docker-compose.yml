@@ -29,18 +29,31 @@ services:
     container_name: experience
     networks:
       - service_mesh
-      - public
+      - web_exp
     ports:
       - "8002:8000"
     volumes:
       - ./experience:/app
     command: "mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./experience/wsgi.py"
 
-  front:
+  web1:
     image: tp33/django
     container_name: front
     networks:
-      - public
+      - web_exp
+      - haproxy_web
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./front:/app
+    command: "mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./front/wsgi.py"
+
+  web2:
+    image: tp33/django
+    container_name: front
+    networks:
+      - web_exp
+      - haproxy_web
     ports:
       - "8000:8000"
     volumes:
@@ -85,8 +98,50 @@ services:
     ports:
         - "9200:9200"
 
+  selenium-chrome:
+    image: selenium/standalone-chrome
+    container_name: selenium-chrome
+    depends_on:
+      - haproxy
+    networks:
+      - service_mesh
+      - public
+      - haproxy_web
+    ports:
+      - "4444:4444"
+
+  selenium-test:
+    image: tp33/django
+    container_name: selenium-test
+    networks:
+      - service_mesh
+      - haproxy_web
+    depends_on:
+      - selenium-chrome
+      - haproxy
+    volumes:
+      - ./selenium:/app
+    command: tail -f /dev/null
+
+  haproxy:
+    image: haproxy
+    container_name: haproxy
+    depends_on:
+      - web1
+      - web2
+    volumes:
+      - ./haproxy:/app
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    networks:
+      - public
+      - haproxy_web
+    ports:
+      - "80:80"
+
 networks:
   backend:
   public:
   service_mesh:
   batch_network:
+  web_exp:
+  haproxy_web:
