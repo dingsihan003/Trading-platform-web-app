@@ -14,7 +14,6 @@ services:
     container_name: models
     external_links:
       - mysql:db
-    restart: on-failure
     networks:
       - backend
       - service_mesh

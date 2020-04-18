@@ -32,7 +32,7 @@ before_script:
 
 script:
   - docker exec -it models bash -c "python manage.py test"
-  - docker exec -it selenium-test bash -c "pip install selenium; python selenium_test_script.py"
+  - docker exec -it selenium-test bash -c "pip install selenium; python selenium_test.py"
 
 after_script:
 - docker-compose down --volumes
