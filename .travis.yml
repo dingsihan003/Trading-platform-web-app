@@ -26,7 +26,7 @@ install:
 
 before_script:
 - docker start mysql
-- docker-compose -f docker-compose-travis.yml up -d
+- docker-compose -f docker-compose.yml up -d
 - sleep 60
 - docker ps -a
 
