@@ -18,7 +18,7 @@ class WebFunctions(unittest.TestCase):
     def test_home(self):
         driver = self.driver
         time.sleep(5)
-        driver.get("http://web1:8000/")
+        driver.get("http://web1:8000/home/")
         print(driver)
         print(driver.title)
         self.assertIn("Market", driver.title)

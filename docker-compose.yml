@@ -150,6 +150,8 @@ services:
 
 networks:
   backend:
+     external:
+       name: backend
   public:
   service_mesh:
   batch_network:
