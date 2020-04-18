@@ -17,8 +17,10 @@ services:
     networks:
       - backend
       - service_mesh
-    ports:
-      - "8001:8000"
+    # ports:
+    #   - "8001:8000"
+    expose:
+      - "8000"
     volumes:
       - ./isa:/app
     command: bash -c "python manage.py migrate && python manage.py loaddata db.json && mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./isa/wsgi.py"
@@ -30,8 +32,10 @@ services:
     networks:
       - service_mesh
       - web_exp
-    ports:
-      - "8002:8000"
+    # ports:
+    #   - "8002:8000"
+    expose:
+      - "8000"
     volumes:
       - ./experience:/app
     command: "mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./experience/wsgi.py"
@@ -42,8 +46,10 @@ services:
     networks:
       - web_exp
       - haproxy_web
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
+    expose:
+      - "8000"
     volumes:
       - ./front:/app
     command: "mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./front/wsgi.py"
@@ -54,8 +60,10 @@ services:
     networks:
       - web_exp
       - haproxy_web
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
+    expose:
+      - "8000"
     volumes:
       - ./front:/app
     command: "mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./front/wsgi.py"
