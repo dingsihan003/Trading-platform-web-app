@@ -14,6 +14,7 @@ services:
     container_name: models
     external_links:
       - mysql:db
+    restart: on-failure
     networks:
       - backend
       - service_mesh
@@ -21,6 +22,8 @@ services:
     #   - "8001:8000"
     expose:
       - "8000"
+    depends_on:
+      - "es"
     volumes:
       - ./isa:/app
     command: bash -c "python manage.py migrate && python manage.py loaddata db.json && mod_wsgi-express start-server --log-to-terminal --reload-on-changes ./isa/wsgi.py"
