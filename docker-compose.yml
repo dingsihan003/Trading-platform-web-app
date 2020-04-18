@@ -38,7 +38,7 @@ services:
 
   web1:
     image: tp33/django
-    container_name: front
+    container_name: web1
     networks:
       - web_exp
       - haproxy_web
@@ -50,7 +50,7 @@ services:
 
   web2:
     image: tp33/django
-    container_name: front
+    container_name: web2
     networks:
       - web_exp
       - haproxy_web
