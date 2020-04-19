@@ -28,7 +28,7 @@ class WebFunctions(unittest.TestCase):
         driver.get("http://web1:8000/signup/")
         username = driver.find_element_by_name("username")
         password = driver.find_element_by_name("password")
-        email = driver.find_element_by_namw("email")
+        email = driver.find_element_by_name("email")
         location = driver.find_element_by_name("location")
         submit = driver.find_element_by_name("submit")
         email.send_keys("selenium@test.com")
