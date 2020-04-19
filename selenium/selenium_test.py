@@ -34,6 +34,7 @@ class WebFunctions(unittest.TestCase):
         email.send_keys("selenium@test.com")
         username.send_keys("selenium")
         password.send_keys('test')
+        location.send_keys('VA')
         submit.click()
 
         driver.get("http://web1:8000/login")
