@@ -9,6 +9,7 @@
           <th>Price</th>
           <th>Description</th>
           <th>Date added</th>
+          <th>Recommended_items</th>
         </tr>
       </thead>
       <tbody>
@@ -17,5 +18,10 @@
               <th>{{ product.product_base_price}}</th>
               <th>{{ product.product_description}}</th>
               <th>{{ product.product_date_added}}</th>
-              </tr>
+              <th>
+                {% for item in recommandation.recommended_items %}
+                <a href="{% url 'product_detail' item %}" class="btn btn-primary">{{item}}</a>
+                {% endfor %}
+              </th>
+                
 {% endblock %}

@@ -31,5 +31,7 @@ urlpatterns = [
     path('api/v1/reviews/create/',views.post_review, name='create_reviews'),
     path('api/v1/reviews/delete/<int:review_id>/',views.delete_review, name='delete_review'),
     path('api/v1/reviews/update/<int:review_id>/',views.update_review, name='update_review'),
+    path('api/v1/recommendation/create/', views.create_recommendation, name="create_recommendation"),
+    path('api/v1/recommendation/<pk>/', views.get_recommendation, name="get_recommendation"),
 
 ]

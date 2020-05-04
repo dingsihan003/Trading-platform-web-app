@@ -62,10 +62,13 @@ def product_detail(request,product_id):
         req = urllib.request.Request('http://models:8000/api/v1/products/'+ str(product_id )+ '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
+        recommendation_req = urllib.request.Request("http://models:8000/api/v1/recommendation/" + str(product_id) + "/")
+        recommendation_resp_json = urllib.request.urlopen(recommendation_req).read().decode('utf-8')
+        recommendation_resp = json.loads(recommendation_resp_json)
         if request.GET.get("auth"):
             data = {'user_name':request.GET.get("user_name"), "item_id":product_id}
             producer_log.send('log', json.dumps(data).encode('utf-8'))
-        return JsonResponse(resp, safe=False)
+        return JsonResponse([resp,recommendation_resp], safe=False)
     else:
         return HttpResponse('Error')
 
@@ -208,6 +211,7 @@ def reset_password(request,active_code):
 
     else:
         return HttpResponse('Error')
+    
 
 
 
