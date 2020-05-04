@@ -147,11 +147,74 @@ services:
       - haproxy_web
     ports:
       - "80:80"
+    environment:
+      - BACKENDS
+      - BALANCE=roundrobin
+  
+  spark-master:
+    image: gettyimages/spark
+    command: bin/spark-class org.apache.spark.deploy.master.Master -h spark-master
+    container_name: spark-master
+    hostname: spark-master
+    environment:
+      MASTER: spark://spark-master:7077
+      SPARK_CONF_DIR: /conf
+    depends_on:
+      - models
+    networks:
+      - service_mesh
+    expose:
+      - 7001
+      - 7002
+      - 7003
+      - 7004
+      - 7005
+      - 7006
+      - 7077
+      - 6066
+    ports:
+      - 4040:4040
+      - 6066:6066
+      - 7077:7077
+      - 8080:8080
+    volumes:
+      - ./spark:/tmp/spark
+      - ./data:/tmp/data
+
+  spark-worker:
+    image: gettyimages/spark
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    container_name: spark-worker
+    hostname: spark-worker
+    environment:
+      SPARK_CONF_DIR: /conf
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 512m
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8081
+    depends_on:
+      - spark-master
+    links:
+      - spark-master
+    expose:
+      - 7012
+      - 7013
+      - 7014
+      - 7015
+      - 7016
+      - 8881
+    networks:
+      - service_mesh
+    ports:
+      - 8081:8081
+    volumes:
+      - ./spark:/tmp/spark
+      - ./data:/tmp/data
 
 networks:
   backend:
-     external:
-       name: backend
+    #  external:
+    #    name: backend
   public:
   service_mesh:
   batch_network:

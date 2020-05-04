@@ -351,3 +351,30 @@ def update_review(request, review_id):
             return HttpResponse("Invalid Input")
     else:
         return HttpResponse("error")
+
+@csrf_exempt
+def create_recommendation(request):
+    if request.method == 'POST':
+        recommendations = json.loads(request.POST.copy().get("recommendations"))
+        if len(recommendations) == 0: 
+            return _success_response({"message": "No recommendations available"}, 200)
+        Recommendation.objects.all().delete()
+
+        for k, v in recommendations.items():
+            Recommendation.objects.create(item_id=int(k), recommended_items=v)
+        return _success_response({"message": "Recommendations created successfully"}, 200)
+
+@csrf_exempt
+def get_recommendation(request, item_pk):
+    if request.method == "GET":
+        try:
+            recommendation = Recommendation.objects.get(item_id = item_pk)
+        except Recommendation.DoesNotExist:
+            return _success_response({"recommendation":{"item_id": item_pk, "recommended_items":[]}}, status=200)
+        except:
+            return _error_response("recommendation does not exist", 404)
+        recommendation_dict = model_to_dict(recommendation)
+        recommendation_dict['recommended_items'] = recommendation_dict['recommended_items'].split(',')
+        return _success_response({"recommendation":recommendation_dict}, status = 200)
+    if request.method == "POST":
+        return _error_response("POST method not allowed", status = 405)

@@ -30,3 +30,7 @@ class Review(models.Model):
     poster = models.ForeignKey(Users, related_name='poster',on_delete=models.CASCADE)
     postee = models.ForeignKey(Users, related_name='postee',on_delete=models.CASCADE)
     review_date_added = models.DateTimeField(default=datetime.now, blank=True)
+
+class Recommendation(models.Model):
+    item_id = models.PositiveIntegerField(unique=True)
+    recommended_items = models.CharField(max_length=200, default="none")
