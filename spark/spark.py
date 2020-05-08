@@ -6,8 +6,8 @@ import json
 import urllib
 import collections
 
-sc = SparkContext("spark://spark-master:7077", "PopularItems")
-data = sc.textFile("/tmp/data/access.log", 2) 
+spkcontext = SparkContext("spark://spark-master:7077", "PopularItems")
+data = spkcontext.textFile("/tmp/data/access.log", 2) 
 pairs = data.map(lambda line: line.split())
 list_pairs = pairs.groupByKey()
 list_coview_pairs = list_pairs.flatMap(lambda line: [[line[0], coview] for coview in combinations(list(line[1]), 2)])
@@ -27,16 +27,16 @@ for pair, count in output:
     f.write(str(pair) + ' ' + str(count) + "\n")
     table[pair[0]].add(pair[1])
     table[pair[1]].add(pair[0])
-recommendations = {}
+recommend = {}
 for k, v in table.items():
-    recommendations[k] = ','.join(list(v))
+    recommend[k] = ','.join(list(v))
 
 post_value = {
-  'recommendations': json.dumps(recommendations)
+  'recommendations': json.dumps(recommend)
 }
 post_encoded = urllib.parse.urlencode(post_value).encode('utf-8')
 print(post_encoded)
 response =  urllib.request.urlopen("http://models:8000/api/v1/recommendation/create/", post_encoded).read().decode('utf-8')
 print(response)
-sc.stop()
+spkcontext.stop()
 
