@@ -12,13 +12,13 @@ def update_counts():
   f = open("/tmp/data/access.log", "r")
   c = collections.defaultdict(set)
   for line in f.readlines():
-    user_id, item_id  = line.split()
-    c[item_id].add(user_id)
-  for item_id, users in c.items():
-    es.update(index='listing_index', doc_type='listing', id=item_id , body={ 'script' : 'ctx._source.visits = 0'})
+    user, item  = line.split()
+    c[item].add(user)
+  for item, users in c.items():
+    es.update(index='listing_index', doc_type='listing', id=item , body={ 'script' : 'ctx._source.visits = 0'})
     try:
       for i in range(len(users)):
-        es.update(index='listing_index', doc_type='listing', id=item_id , body={ 'script' : 'ctx._source.visits += 1'})
+        es.update(index='listing_index', doc_type='listing', id=item , body={ 'script' : 'ctx._source.visits += 1'})
     except Exception as e:
       print(str(e))
       time.sleep(1)
