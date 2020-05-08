@@ -57,7 +57,6 @@ pip-delete-this-directory.txt
 
 
 ### Django ###
-*.log
 *.pot
 *.pyc
 __pycache__/
